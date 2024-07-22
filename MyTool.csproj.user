@@ -2,7 +2,7 @@
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <StartAction>Program</StartAction>
-    <StartProgram>C:\Users\tjkormo\source\repos\MyTool\bin\Debug\XrmToolBox.exe</StartProgram>
+    <StartProgram>C:\Users\tjkormo\source\repos\MyXrmTools\APIReferenceFinder\bin\Debug\XrmToolBox.exe</StartProgram>
     <StartArguments>/overridepath:.</StartArguments>
   </PropertyGroup>
 </Project>

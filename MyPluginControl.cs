@@ -3,14 +3,9 @@ using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.Services.Description;
-using System.Windows.Documents;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility;
 
@@ -114,6 +109,67 @@ namespace MyTool
             public string value { get; set; }
         }
 
+
+
+
+        private void GetSolutions()
+        {
+            var managed = managedCheck.Checked;
+            var unmanaged = unmanagedCheck.Checked;
+
+            var all = (managed && unmanaged) || (!managed && !unmanaged);
+
+            var message = $"Getting All {(managed ? "Managed" : "")} Solutions";
+            WorkAsync(new WorkAsyncInfo()
+            {
+                Message = message,
+                AsyncArgument = null,
+                Work = (worker, args) =>
+                {
+                    var query_ismanaged = managed;
+                    var query = new QueryExpression("solution");
+                    query.ColumnSet.AddColumns("friendlyname", "solutionid", "uniquename");
+                    query.AddOrder("friendlyname", OrderType.Ascending);
+
+                    if (!all) query.Criteria.AddCondition("ismanaged", ConditionOperator.Equal, query_ismanaged);
+
+                    args.Result = Service.RetrieveMultiple(query);
+                },
+                PostWorkCallBack = (args) =>
+                {
+                    if (args.Error != null)
+                    {
+                        MessageBox.Show(args.Error.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    var result = args.Result as EntityCollection;
+
+                    ComboboxSolutions.DataSource = new List<ListObject>();
+
+                    if (result != null)
+                    {
+
+                        var items = new List<ListObject>();
+                        foreach (var sol in result.Entities)
+                        {
+                            var friendlyName = sol.Contains("friendlyname") ? (string)sol["friendlyname"] : "";
+                            var name = $"{friendlyName} ({sol["uniquename"]})";
+                            var value = sol.Id.ToString();
+
+                            items.Add(new ListObject()
+                            {
+                                name = name,
+                                value = value,
+                            });
+                        }
+
+                        ComboboxSolutions.DataSource = items;
+                        ComboboxSolutions.DisplayMember = "name";
+                        ComboboxSolutions.ValueMember = "value";
+                    }
+                }
+            });
+        }
+
         private void GetAPIs()
         {
             WorkAsync(new WorkAsyncInfo()
@@ -135,16 +191,11 @@ namespace MyTool
                     }
                     var result = args.Result as EntityCollection;
 
-                    ComboboxAPIs.Items.Clear();
+                    ComboboxAPIs.DataSource = new List<ListObject>();
 
                     if (result != null)
                     {
                         var items = new List<ListObject>();
-                        //items.Add(new ListObject()
-                        //{
-                        //    name = "",
-                        //    value = null
-                        //});
 
                         foreach (var ent in result.Entities)
                         {
@@ -158,14 +209,19 @@ namespace MyTool
                         ComboboxAPIs.DataSource = items;
                         ComboboxAPIs.DisplayMember = "name";
                         ComboboxAPIs.ValueMember = "value";
-
                     }
                 }
             });
         }
 
-        private void GetFlows()
+        private void GetSolutionFlows()
         {
+            if (ComboboxSolutions.SelectedIndex == -1) { return; }
+
+            var selectedSolution = ComboboxSolutions.SelectedItem as ListObject;
+
+            var solutionId = selectedSolution.value;
+
             var api = ComboboxAPIs.SelectedItem as ListObject;
             if (api == null) return;
 
@@ -174,7 +230,7 @@ namespace MyTool
 
             WorkAsync(new WorkAsyncInfo()
             {
-                Message = "Fetching flows",
+                Message = "Fetching Solution Flows",
                 AsyncArgument = null,
                 Work = (worker, args) =>
                 {
@@ -189,7 +245,22 @@ namespace MyTool
                                 <order attribute=""name"" />
                               </entity>
                             </fetch>";
-                    args.Result = Service.RetrieveMultiple(new FetchExpression(fetchXml));
+                    var flowsList = Service.RetrieveMultiple(new FetchExpression(fetchXml)).Entities.ToList();
+
+                    var query_solutionid = solutionId;
+                    var query_componenttype = 29;
+
+                    var query = new QueryExpression("solutioncomponent");
+                    query.ColumnSet.AllColumns = true;
+                    query.Criteria.AddCondition("solutionid", ConditionOperator.Equal, query_solutionid);
+                    query.Criteria.AddCondition("componenttype", ConditionOperator.Equal, query_componenttype);
+
+                    var solutionComponents = Service.RetrieveMultiple(query).Entities;
+                    var ids = solutionComponents.Select(c => c["objectid"]).ToList();
+
+                    var filtered = flowsList.Where(f => ids.Contains(f.Id)).ToList();
+
+                    args.Result = filtered;
                 },
                 PostWorkCallBack = (args) =>
                 {
@@ -197,7 +268,7 @@ namespace MyTool
                     {
                         MessageBox.Show(args.Error.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
-                    var result = args.Result as EntityCollection;
+                    var result = args.Result as List<Entity>;
 
                     DataTable dataTable = new DataTable();
 
@@ -205,7 +276,7 @@ namespace MyTool
                     dataTable.Columns.Add("Name", typeof(string));
                     dataTable.Columns.Add("Link", typeof(string));
 
-                    foreach (var ent in result.Entities)
+                    foreach (var ent in result)
                     {
                         var name = (string)ent["name"];
                         dataTable.Rows.Add(name, "link");
@@ -214,12 +285,17 @@ namespace MyTool
                     // Bind the DataTable to the DataGridView.
                     FlowsGrid.DataSource = dataTable;
                 }
-
             });
         }
-
-        private void GetJS()
+ 
+        private void GetSolutionJS()
         {
+            if (ComboboxSolutions.SelectedIndex == -1) { return; }
+
+            var selectedSolution = ComboboxSolutions.SelectedItem as ListObject;
+
+            var solutionId = selectedSolution.value;
+
             var api = ComboboxAPIs.SelectedItem as ListObject;
             if (api == null) return;
 
@@ -231,13 +307,25 @@ namespace MyTool
                 AsyncArgument = null,
                 Work = (worker, args) =>
                 {
-                    var query = new QueryExpression("webresource");
-                    query.ColumnSet.AddColumns("webresourceid", "displayname", "name", "content");
-                    query.Criteria.AddCondition("content", ConditionOperator.NotNull);
-                    query.Criteria.AddCondition("name", ConditionOperator.BeginsWith, "span_/js/");
-                    query.Criteria.AddCondition("webresourcetype", ConditionOperator.Equal, 3);
 
-                    args.Result = Service.RetrieveMultiple(query);
+                    var query_solutionid = solutionId;
+                    var query_componenttype = 61;
+
+                    var query = new QueryExpression("solutioncomponent");
+                    query.ColumnSet.AllColumns = true;
+                    query.Criteria.AddCondition("solutionid", ConditionOperator.Equal, query_solutionid);
+                    query.Criteria.AddCondition("componenttype", ConditionOperator.Equal, query_componenttype);
+
+                    var solutionComponents = Service.RetrieveMultiple(query).Entities;
+
+                    var webresourcesList = new List<Entity>();
+                    foreach (var comp in solutionComponents)
+                    {
+                        var wr = Service.Retrieve("webresource", (Guid)comp["objectid"], new ColumnSet("webresourceid", "displayname", "name", "content"));
+                        webresourcesList.Add(wr);
+                    }
+
+                    args.Result = webresourcesList;
                 },
                 PostWorkCallBack = (args) =>
                 {
@@ -245,23 +333,18 @@ namespace MyTool
                     {
                         MessageBox.Show(args.Error.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
-                    var result = args.Result as EntityCollection;
-
+                    var result = args.Result as List<Entity>;
 
                     DataTable dataTable = new DataTable();
-
                     // Define the columns.
                     dataTable.Columns.Add("ID", typeof(Guid));
                     dataTable.Columns.Add("Name", typeof(string));
                     dataTable.Columns.Add("Link", typeof(string));
 
-                    // Bind the DataTable to the DataGridView.
-                    JSGrid.DataSource = dataTable;
-
                     if (result != null)
                     {
                         var items = new List<ListObject>();
-                        foreach (var resource in result.Entities)
+                        foreach (var resource in result)
                         {
                             var content = (string)resource["content"];
 
@@ -274,27 +357,14 @@ namespace MyTool
                             var id = (Guid)resource["webresourceid"];
 
                             dataTable.Rows.Add(id, name, "link");
-
-                            JSGrid.Columns["ID"].Visible = false;
-
-                            // Add a button column to the DataGridView.
-                            DataGridViewButtonColumn buttonColumn = new DataGridViewButtonColumn();
-                            buttonColumn.HeaderText = "Info";
-                            buttonColumn.Name = "InfoButton";
-                            buttonColumn.Text = "View code";
-                            buttonColumn.UseColumnTextForButtonValue = true;
-                            JSGrid.Columns.Add(buttonColumn);
-
-                            // Handle the CellContentClick event.
-                            JSGrid.CellContentClick += DataGridView1_CellContentClick;
                         }
                     }
+                    JSGrid.DataSource = dataTable;
 
                 }
             });
         }
-
-        private void DataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void ViewCodeClick(object sender, DataGridViewCellEventArgs e)
         {
             // Check if the click is on a button cell.
             if (e.ColumnIndex == JSGrid.Columns["InfoButton"].Index && e.RowIndex >= 0)
@@ -306,15 +376,20 @@ namespace MyTool
         }
 
 
-        private void LoadBtn_Click(object sender, EventArgs e)
+        private void LoadAPIsBtn_Click(object sender, EventArgs e)
         {
             ExecuteMethod(GetAPIs);
         }
 
         private void OnAPISelected(object sender, EventArgs e)
         {
-            ExecuteMethod(GetFlows);
-            ExecuteMethod(GetJS);
+            ExecuteMethod(GetSolutionFlows);
+            ExecuteMethod(GetSolutionJS);
+        }
+
+        private void OnSolutionSelected(object sender, EventArgs e)
+        {
+            ExecuteMethod(GetAPIs);
         }
 
         private void ListOfFlows_SelectedIndexChanged(object sender, EventArgs e)
@@ -324,27 +399,30 @@ namespace MyTool
 
         private void InitializeFlowView()
         {
-            //ListOfFlows.View = View.Details;
-            //ListOfFlows.FullRowSelect = true;
-            //ListOfFlows.GridLines = true;
-
-            //ListOfFlows.Columns.Add("Flow Name", 250);
-            //ListOfFlows.Columns.Add("Link", 50);
         }
 
         private void InitializeJSView()
         {
-            //ListOfJS.View = View.Details;
-            //ListOfJS.FullRowSelect = true;
-            //ListOfJS.GridLines = true;
+            DataTable dataTable = new DataTable();
 
-            //ListOfJS.Columns.Add("JS Name", 250);
-            //ListOfJS.Columns.Add("Id", 50);
-        }
+            // Define the columns.
+            dataTable.Columns.Add("ID", typeof(Guid));
+            dataTable.Columns.Add("Name", typeof(string));
+            dataTable.Columns.Add("Link", typeof(string));
 
-        private void LoadButton_Click(object sender, EventArgs e)
-        {
-            ExecuteMethod(GetAPIs);
+            JSGrid.DataSource = dataTable;
+            JSGrid.Columns["ID"].Visible = false;
+
+            // Add a button column to the DataGridView.
+            DataGridViewButtonColumn buttonColumn = new DataGridViewButtonColumn();
+            buttonColumn.HeaderText = "Info";
+            buttonColumn.Name = "InfoButton";
+            buttonColumn.Text = "View code";
+            buttonColumn.UseColumnTextForButtonValue = true;
+            JSGrid.Columns.Add(buttonColumn);
+
+            // Handle the CellContentClick event.
+            JSGrid.CellContentClick += ViewCodeClick;
         }
 
         private void ShowCode(Guid id)
@@ -426,65 +504,10 @@ namespace MyTool
 
         }
 
-        private void LoadSolutions()
+
+        private void LoadSolutionsBtnClick(object sender, EventArgs e)
         {
-            WorkAsync(new WorkAsyncInfo()
-            {
-                Message = "Getting Solutions",
-                AsyncArgument = null,
-                Work = (worker, args) =>
-                {
-                    var fetchXml = $@"<fetch>
-	                                    <entity name=""solution"">
-		                                    <attribute name=""solutionid"" />
-		                                    <attribute name=""friendlyname"" />
-		                                    <attribute name=""uniquename"" />
-	                                    </entity>
-                                    </fetch>";
-                    args.Result = Service.RetrieveMultiple(new FetchExpression(fetchXml));
-                },
-                PostWorkCallBack = (args) =>
-                {
-                    if (args.Error != null)
-                    {
-                        MessageBox.Show(args.Error.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                    var result = args.Result as EntityCollection;
-
-                    FlowsGrid.Rows.Clear();
-
-                    if (result != null)
-                    {
-                        var items = new List<ListObject>();
-
-                        DataTable dataTable = new DataTable();
-
-                        // Define the columns.
-                        dataTable.Columns.Add("ID", typeof(int));
-                        dataTable.Columns.Add("Name", typeof(string));
-                        dataTable.Columns.Add("phone", typeof(string));
-
-                        // Add some rows to the DataTable.
-
-                        dataTable.Rows.Add(2, "Jane Smith", "987-654-3210");
-                        dataTable.Rows.Add(3, "Samuel Green", "555-666-7777");
-
-                        // Bind the DataTable to the DataGridView.
-
-                        foreach (var ent in result.Entities)
-                        {
-                            dataTable.Rows.Add(1, "John Doe", "123-456-7890");
-                        }
-                        FlowsGrid.DataSource = dataTable;
-
-                    }
-                }
-            });
-        }
-
-        private void toolStripButton3_Click(object sender, EventArgs e)
-        {
-            ExecuteMethod(LoadSolutions);
+            ExecuteMethod(GetSolutions);
         }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)

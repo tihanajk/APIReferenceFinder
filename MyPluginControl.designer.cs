@@ -33,11 +33,11 @@ namespace MyTool
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MyPluginControl));
             this.ComboboxAPIs = new System.Windows.Forms.ComboBox();
             this.toolStrip2 = new System.Windows.Forms.ToolStrip();
-            this.LoadButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
+            this.LoadButton = new System.Windows.Forms.ToolStripButton();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.comboBox2 = new System.Windows.Forms.ComboBox();
+            this.ComboboxSolutions = new System.Windows.Forms.ComboBox();
             this.Solution = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
@@ -58,7 +58,7 @@ namespace MyTool
             this.ComboboxAPIs.FormattingEnabled = true;
             this.ComboboxAPIs.Location = new System.Drawing.Point(458, 70);
             this.ComboboxAPIs.Name = "ComboboxAPIs";
-            this.ComboboxAPIs.Size = new System.Drawing.Size(291, 21);
+            this.ComboboxAPIs.Size = new System.Drawing.Size(291, 32);
             this.ComboboxAPIs.TabIndex = 1;
             this.ComboboxAPIs.SelectedIndexChanged += new System.EventHandler(this.OnAPISelected);
             // 
@@ -70,27 +70,27 @@ namespace MyTool
             this.LoadButton});
             this.toolStrip2.Location = new System.Drawing.Point(0, 0);
             this.toolStrip2.Name = "toolStrip2";
-            this.toolStrip2.Size = new System.Drawing.Size(1666, 35);
+            this.toolStrip2.Size = new System.Drawing.Size(1666, 40);
             this.toolStrip2.TabIndex = 3;
             this.toolStrip2.Text = "toolStrip2";
-            // 
-            // LoadButton
-            // 
-            this.LoadButton.Image = ((System.Drawing.Image)(resources.GetObject("LoadButton.Image")));
-            this.LoadButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.LoadButton.Name = "LoadButton";
-            this.LoadButton.Size = new System.Drawing.Size(91, 32);
-            this.LoadButton.Text = "Load APIs";
-            this.LoadButton.Click += new System.EventHandler(this.LoadButton_Click);
             // 
             // toolStripButton3
             // 
             this.toolStripButton3.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton3.Image")));
             this.toolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton3.Name = "toolStripButton3";
-            this.toolStripButton3.Size = new System.Drawing.Size(117, 32);
+            this.toolStripButton3.Size = new System.Drawing.Size(181, 34);
             this.toolStripButton3.Text = "Load Solutions";
-            this.toolStripButton3.Click += new System.EventHandler(this.toolStripButton3_Click);
+            this.toolStripButton3.Click += new System.EventHandler(this.LoadSolutionsBtnClick);
+            // 
+            // LoadButton
+            // 
+            this.LoadButton.Image = ((System.Drawing.Image)(resources.GetObject("LoadButton.Image")));
+            this.LoadButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.LoadButton.Name = "LoadButton";
+            this.LoadButton.Size = new System.Drawing.Size(137, 34);
+            this.LoadButton.Text = "Load APIs";
+            this.LoadButton.Click += new System.EventHandler(this.LoadAPIsBtn_Click);
             // 
             // label1
             // 
@@ -98,7 +98,7 @@ namespace MyTool
             this.label1.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.label1.Location = new System.Drawing.Point(19, 108);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(37, 13);
+            this.label1.Size = new System.Drawing.Size(69, 25);
             this.label1.TabIndex = 5;
             this.label1.Text = "Flows:";
             this.label1.Click += new System.EventHandler(this.label1_Click);
@@ -109,17 +109,18 @@ namespace MyTool
             this.label2.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.label2.Location = new System.Drawing.Point(431, 108);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(79, 13);
+            this.label2.Size = new System.Drawing.Size(146, 25);
             this.label2.TabIndex = 7;
             this.label2.Text = "Webresources:";
             // 
-            // comboBox2
+            // ComboboxSolutions
             // 
-            this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Location = new System.Drawing.Point(22, 72);
-            this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(291, 21);
-            this.comboBox2.TabIndex = 8;
+            this.ComboboxSolutions.FormattingEnabled = true;
+            this.ComboboxSolutions.Location = new System.Drawing.Point(22, 72);
+            this.ComboboxSolutions.Name = "ComboboxSolutions";
+            this.ComboboxSolutions.Size = new System.Drawing.Size(291, 32);
+            this.ComboboxSolutions.TabIndex = 8;
+            this.ComboboxSolutions.SelectedIndexChanged += new System.EventHandler(this.OnSolutionSelected);
             // 
             // Solution
             // 
@@ -128,7 +129,7 @@ namespace MyTool
             this.Solution.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.Solution.Location = new System.Drawing.Point(19, 52);
             this.Solution.Name = "Solution";
-            this.Solution.Size = new System.Drawing.Size(57, 13);
+            this.Solution.Size = new System.Drawing.Size(98, 25);
             this.Solution.TabIndex = 9;
             this.Solution.Text = "Solution:";
             this.Solution.Click += new System.EventHandler(this.Solution_Click);
@@ -140,7 +141,7 @@ namespace MyTool
             this.label3.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.label3.Location = new System.Drawing.Point(455, 54);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(31, 13);
+            this.label3.Size = new System.Drawing.Size(54, 25);
             this.label3.TabIndex = 10;
             this.label3.Text = "API:";
             // 
@@ -150,7 +151,7 @@ namespace MyTool
             this.label4.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.label4.Location = new System.Drawing.Point(879, 108);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(35, 13);
+            this.label4.Size = new System.Drawing.Size(66, 25);
             this.label4.TabIndex = 12;
             this.label4.Text = "Code:";
             // 
@@ -190,7 +191,7 @@ namespace MyTool
             this.managedCheck.CheckState = System.Windows.Forms.CheckState.Checked;
             this.managedCheck.Location = new System.Drawing.Point(344, 56);
             this.managedCheck.Name = "managedCheck";
-            this.managedCheck.Size = new System.Drawing.Size(71, 17);
+            this.managedCheck.Size = new System.Drawing.Size(121, 29);
             this.managedCheck.TabIndex = 16;
             this.managedCheck.Text = "Managed";
             this.managedCheck.UseVisualStyleBackColor = true;
@@ -202,7 +203,7 @@ namespace MyTool
             this.unmanagedCheck.CheckState = System.Windows.Forms.CheckState.Checked;
             this.unmanagedCheck.Location = new System.Drawing.Point(344, 79);
             this.unmanagedCheck.Name = "unmanagedCheck";
-            this.unmanagedCheck.Size = new System.Drawing.Size(84, 17);
+            this.unmanagedCheck.Size = new System.Drawing.Size(145, 29);
             this.unmanagedCheck.TabIndex = 17;
             this.unmanagedCheck.Text = "Unmanaged";
             this.unmanagedCheck.UseVisualStyleBackColor = true;
@@ -214,7 +215,7 @@ namespace MyTool
             this.flowsCheck.CheckState = System.Windows.Forms.CheckState.Checked;
             this.flowsCheck.Location = new System.Drawing.Point(780, 56);
             this.flowsCheck.Name = "flowsCheck";
-            this.flowsCheck.Size = new System.Drawing.Size(53, 17);
+            this.flowsCheck.Size = new System.Drawing.Size(89, 29);
             this.flowsCheck.TabIndex = 18;
             this.flowsCheck.Text = "Flows";
             this.flowsCheck.UseVisualStyleBackColor = true;
@@ -226,7 +227,7 @@ namespace MyTool
             this.wrCheck.CheckState = System.Windows.Forms.CheckState.Checked;
             this.wrCheck.Location = new System.Drawing.Point(780, 76);
             this.wrCheck.Name = "wrCheck";
-            this.wrCheck.Size = new System.Drawing.Size(95, 17);
+            this.wrCheck.Size = new System.Drawing.Size(166, 29);
             this.wrCheck.TabIndex = 19;
             this.wrCheck.Text = "Webresources";
             this.wrCheck.UseVisualStyleBackColor = true;
@@ -244,7 +245,7 @@ namespace MyTool
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.Solution);
-            this.Controls.Add(this.comboBox2);
+            this.Controls.Add(this.ComboboxSolutions);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.toolStrip2);
@@ -278,7 +279,7 @@ namespace MyTool
         private System.Windows.Forms.ToolStripButton LoadButton;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.ComboBox comboBox2;
+        private System.Windows.Forms.ComboBox ComboboxSolutions;
         private System.Windows.Forms.Label Solution;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
