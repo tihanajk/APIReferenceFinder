@@ -199,18 +199,20 @@ namespace MyTool
                     }
                     var result = args.Result as EntityCollection;
 
-                    ListOfFlows.Items.Clear();
+                    DataTable dataTable = new DataTable();
 
-                    if (result != null)
-                    {   
-                        foreach (var f in result.Entities)
-                        {
-                            var flowName = (string)f["name"];
-                            ListViewItem item = new ListViewItem(flowName);
-                            item.SubItems.Add("link");
-                            ListOfFlows.Items.Add(item);
-                        }
+                    // Define the columns.
+                    dataTable.Columns.Add("Name", typeof(string));
+                    dataTable.Columns.Add("Link", typeof(string));
+
+                    foreach (var ent in result.Entities)
+                    {
+                        var name = (string)ent["name"];
+                        dataTable.Rows.Add(name, "link");
                     }
+
+                    // Bind the DataTable to the DataGridView.
+                    FlowsGrid.DataSource = dataTable;
                 }
 
             });
@@ -225,7 +227,7 @@ namespace MyTool
             if (apiLogName == null) return;
 
             WorkAsync(new WorkAsyncInfo()
-            {               
+            {
                 AsyncArgument = null,
                 Work = (worker, args) =>
                 {
@@ -245,11 +247,19 @@ namespace MyTool
                     }
                     var result = args.Result as EntityCollection;
 
-                    ListOfJS.Items.Clear();
+
+                    DataTable dataTable = new DataTable();
+
+                    // Define the columns.
+                    dataTable.Columns.Add("ID", typeof(Guid));
+                    dataTable.Columns.Add("Name", typeof(string));
+                    dataTable.Columns.Add("Link", typeof(string));
+
+                    // Bind the DataTable to the DataGridView.
+                    JSGrid.DataSource = dataTable;
 
                     if (result != null)
                     {
-
                         var items = new List<ListObject>();
                         foreach (var resource in result.Entities)
                         {
@@ -262,17 +272,40 @@ namespace MyTool
 
                             var name = (string)resource["name"];
                             var id = (Guid)resource["webresourceid"];
-                            
-                            ListViewItem item = new ListViewItem(name);
-                            item.SubItems.Add(id.ToString());
-                            ListOfJS.Items.Add(item);
 
+                            dataTable.Rows.Add(id, name, "link");
+
+                            JSGrid.Columns["ID"].Visible = false;
+
+                            // Add a button column to the DataGridView.
+                            DataGridViewButtonColumn buttonColumn = new DataGridViewButtonColumn();
+                            buttonColumn.HeaderText = "Info";
+                            buttonColumn.Name = "InfoButton";
+                            buttonColumn.Text = "View code";
+                            buttonColumn.UseColumnTextForButtonValue = true;
+                            JSGrid.Columns.Add(buttonColumn);
+
+                            // Handle the CellContentClick event.
+                            JSGrid.CellContentClick += DataGridView1_CellContentClick;
                         }
                     }
-                }
 
+                }
             });
         }
+
+        private void DataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            // Check if the click is on a button cell.
+            if (e.ColumnIndex == JSGrid.Columns["InfoButton"].Index && e.RowIndex >= 0)
+            {
+                int rowIndex = e.RowIndex;
+                var id = (Guid)JSGrid.Rows[rowIndex].Cells["ID"].Value;
+                ShowCode(id);
+            }
+        }
+
+
         private void LoadBtn_Click(object sender, EventArgs e)
         {
             ExecuteMethod(GetAPIs);
@@ -291,22 +324,22 @@ namespace MyTool
 
         private void InitializeFlowView()
         {
-            ListOfFlows.View = View.Details;
-            ListOfFlows.FullRowSelect = true;
-            ListOfFlows.GridLines = true;
+            //ListOfFlows.View = View.Details;
+            //ListOfFlows.FullRowSelect = true;
+            //ListOfFlows.GridLines = true;
 
-            ListOfFlows.Columns.Add("Flow Name", 250);
-            ListOfFlows.Columns.Add("Link", 50);
+            //ListOfFlows.Columns.Add("Flow Name", 250);
+            //ListOfFlows.Columns.Add("Link", 50);
         }
 
         private void InitializeJSView()
         {
-            ListOfJS.View = View.Details;
-            ListOfJS.FullRowSelect = true;
-            ListOfJS.GridLines = true;
+            //ListOfJS.View = View.Details;
+            //ListOfJS.FullRowSelect = true;
+            //ListOfJS.GridLines = true;
 
-            ListOfJS.Columns.Add("JS Name", 250);
-            ListOfJS.Columns.Add("Id", 50);
+            //ListOfJS.Columns.Add("JS Name", 250);
+            //ListOfJS.Columns.Add("Id", 50);
         }
 
         private void LoadButton_Click(object sender, EventArgs e)
@@ -314,13 +347,8 @@ namespace MyTool
             ExecuteMethod(GetAPIs);
         }
 
-        private void ShowCode()
-        {            
-            var selected = ListOfJS.SelectedItems[0] as ListViewItem;
-            if (selected == null) return;
-
-            var id = selected.SubItems[1].Text;
-
+        private void ShowCode(Guid id)
+        {
             var api = ComboboxAPIs.SelectedItem as ListObject;
             if (api == null) return;
 
@@ -334,7 +362,7 @@ namespace MyTool
                 {
                     var query = new QueryExpression("webresource");
                     query.ColumnSet.AddColumns("webresourceid", "displayname", "name", "content");
-                    
+
                     query.Criteria.AddCondition("webresourceid", ConditionOperator.Equal, id);
 
                     args.Result = Service.RetrieveMultiple(query).Entities.FirstOrDefault();
@@ -389,8 +417,84 @@ namespace MyTool
 
         private void OnJSSelected(object sender, EventArgs e)
         {
-            if (ListOfJS.SelectedItems.Count != 1) return;
-            ExecuteMethod(ShowCode);
+            //if (ListOfJS.SelectedItems.Count != 1) return;
+            //ShowCode(id);
+        }
+
+        private void splitContainer1_Panel2_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void LoadSolutions()
+        {
+            WorkAsync(new WorkAsyncInfo()
+            {
+                Message = "Getting Solutions",
+                AsyncArgument = null,
+                Work = (worker, args) =>
+                {
+                    var fetchXml = $@"<fetch>
+	                                    <entity name=""solution"">
+		                                    <attribute name=""solutionid"" />
+		                                    <attribute name=""friendlyname"" />
+		                                    <attribute name=""uniquename"" />
+	                                    </entity>
+                                    </fetch>";
+                    args.Result = Service.RetrieveMultiple(new FetchExpression(fetchXml));
+                },
+                PostWorkCallBack = (args) =>
+                {
+                    if (args.Error != null)
+                    {
+                        MessageBox.Show(args.Error.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    var result = args.Result as EntityCollection;
+
+                    FlowsGrid.Rows.Clear();
+
+                    if (result != null)
+                    {
+                        var items = new List<ListObject>();
+
+                        DataTable dataTable = new DataTable();
+
+                        // Define the columns.
+                        dataTable.Columns.Add("ID", typeof(int));
+                        dataTable.Columns.Add("Name", typeof(string));
+                        dataTable.Columns.Add("phone", typeof(string));
+
+                        // Add some rows to the DataTable.
+
+                        dataTable.Rows.Add(2, "Jane Smith", "987-654-3210");
+                        dataTable.Rows.Add(3, "Samuel Green", "555-666-7777");
+
+                        // Bind the DataTable to the DataGridView.
+
+                        foreach (var ent in result.Entities)
+                        {
+                            dataTable.Rows.Add(1, "John Doe", "123-456-7890");
+                        }
+                        FlowsGrid.DataSource = dataTable;
+
+                    }
+                }
+            });
+        }
+
+        private void toolStripButton3_Click(object sender, EventArgs e)
+        {
+            ExecuteMethod(LoadSolutions);
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
