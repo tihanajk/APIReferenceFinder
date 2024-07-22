@@ -48,6 +48,7 @@ namespace MyTool
             this.unmanagedCheck = new System.Windows.Forms.CheckBox();
             this.flowsCheck = new System.Windows.Forms.CheckBox();
             this.wrCheck = new System.Windows.Forms.CheckBox();
+            this.refCounter = new System.Windows.Forms.Label();
             this.toolStrip2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FlowsGrid)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.JSGrid)).BeginInit();
@@ -70,7 +71,7 @@ namespace MyTool
             this.LoadButton});
             this.toolStrip2.Location = new System.Drawing.Point(0, 0);
             this.toolStrip2.Name = "toolStrip2";
-            this.toolStrip2.Size = new System.Drawing.Size(1666, 40);
+            this.toolStrip2.Size = new System.Drawing.Size(1666, 44);
             this.toolStrip2.TabIndex = 3;
             this.toolStrip2.Text = "toolStrip2";
             // 
@@ -79,7 +80,7 @@ namespace MyTool
             this.toolStripButton3.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton3.Image")));
             this.toolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton3.Name = "toolStripButton3";
-            this.toolStripButton3.Size = new System.Drawing.Size(181, 34);
+            this.toolStripButton3.Size = new System.Drawing.Size(181, 38);
             this.toolStripButton3.Text = "Load Solutions";
             this.toolStripButton3.Click += new System.EventHandler(this.LoadSolutionsBtnClick);
             // 
@@ -88,7 +89,7 @@ namespace MyTool
             this.LoadButton.Image = ((System.Drawing.Image)(resources.GetObject("LoadButton.Image")));
             this.LoadButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.LoadButton.Name = "LoadButton";
-            this.LoadButton.Size = new System.Drawing.Size(137, 34);
+            this.LoadButton.Size = new System.Drawing.Size(137, 38);
             this.LoadButton.Text = "Load APIs";
             this.LoadButton.Click += new System.EventHandler(this.LoadAPIsBtn_Click);
             // 
@@ -101,7 +102,6 @@ namespace MyTool
             this.label1.Size = new System.Drawing.Size(69, 25);
             this.label1.TabIndex = 5;
             this.label1.Text = "Flows:";
-            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // label2
             // 
@@ -132,7 +132,6 @@ namespace MyTool
             this.Solution.Size = new System.Drawing.Size(98, 25);
             this.Solution.TabIndex = 9;
             this.Solution.Text = "Solution:";
-            this.Solution.Click += new System.EventHandler(this.Solution_Click);
             // 
             // label3
             // 
@@ -165,6 +164,8 @@ namespace MyTool
             // 
             // FlowsGrid
             // 
+            this.FlowsGrid.AllowUserToAddRows = false;
+            this.FlowsGrid.AllowUserToDeleteRows = false;
             this.FlowsGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.FlowsGrid.Location = new System.Drawing.Point(24, 136);
             this.FlowsGrid.Name = "FlowsGrid";
@@ -172,10 +173,11 @@ namespace MyTool
             this.FlowsGrid.RowTemplate.Height = 31;
             this.FlowsGrid.Size = new System.Drawing.Size(406, 578);
             this.FlowsGrid.TabIndex = 14;
-            this.FlowsGrid.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             // 
             // JSGrid
             // 
+            this.JSGrid.AllowUserToAddRows = false;
+            this.JSGrid.AllowUserToDeleteRows = false;
             this.JSGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.JSGrid.Location = new System.Drawing.Point(436, 136);
             this.JSGrid.Name = "JSGrid";
@@ -187,8 +189,6 @@ namespace MyTool
             // managedCheck
             // 
             this.managedCheck.AutoSize = true;
-            this.managedCheck.Checked = true;
-            this.managedCheck.CheckState = System.Windows.Forms.CheckState.Checked;
             this.managedCheck.Location = new System.Drawing.Point(344, 56);
             this.managedCheck.Name = "managedCheck";
             this.managedCheck.Size = new System.Drawing.Size(121, 29);
@@ -219,22 +219,33 @@ namespace MyTool
             this.flowsCheck.TabIndex = 18;
             this.flowsCheck.Text = "Flows";
             this.flowsCheck.UseVisualStyleBackColor = true;
+            this.flowsCheck.CheckedChanged += new System.EventHandler(this.FlowsCheck_CheckedChanged);
             // 
             // wrCheck
             // 
             this.wrCheck.AutoSize = true;
-            this.wrCheck.Checked = true;
-            this.wrCheck.CheckState = System.Windows.Forms.CheckState.Checked;
             this.wrCheck.Location = new System.Drawing.Point(780, 76);
             this.wrCheck.Name = "wrCheck";
             this.wrCheck.Size = new System.Drawing.Size(166, 29);
             this.wrCheck.TabIndex = 19;
             this.wrCheck.Text = "Webresources";
             this.wrCheck.UseVisualStyleBackColor = true;
+            this.wrCheck.CheckedChanged += new System.EventHandler(this.WrCheck_CheckedChanged);
+            // 
+            // refCounter
+            // 
+            this.refCounter.AutoSize = true;
+            this.refCounter.Location = new System.Drawing.Point(1254, 108);
+            this.refCounter.Name = "refCounter";
+            this.refCounter.Size = new System.Drawing.Size(120, 25);
+            this.refCounter.TabIndex = 20;
+            this.refCounter.Text = "0 references";
+            this.refCounter.Click += new System.EventHandler(this.refCounter_Click);
             // 
             // MyPluginControl
             // 
             this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.Controls.Add(this.refCounter);
             this.Controls.Add(this.wrCheck);
             this.Controls.Add(this.flowsCheck);
             this.Controls.Add(this.unmanagedCheck);
@@ -291,5 +302,6 @@ namespace MyTool
         private System.Windows.Forms.CheckBox unmanagedCheck;
         private System.Windows.Forms.CheckBox flowsCheck;
         private System.Windows.Forms.CheckBox wrCheck;
+        private System.Windows.Forms.Label refCounter;
     }
 }

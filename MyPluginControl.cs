@@ -1,11 +1,14 @@
 ﻿using McTools.Xrm.Connection;
+using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlTypes;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility;
 
@@ -108,9 +111,6 @@ namespace MyTool
             public string name { get; set; }
             public string value { get; set; }
         }
-
-
-
 
         private void GetSolutions()
         {
@@ -216,9 +216,12 @@ namespace MyTool
 
         private void GetSolutionFlows()
         {
-            if (ComboboxSolutions.SelectedIndex == -1) { return; }
+            var fetchFlows = flowsCheck.Checked;
+            if (!fetchFlows) return;            
 
             var selectedSolution = ComboboxSolutions.SelectedItem as ListObject;
+
+            if (selectedSolution == null) return;
 
             var solutionId = selectedSolution.value;
 
@@ -273,13 +276,14 @@ namespace MyTool
                     DataTable dataTable = new DataTable();
 
                     // Define the columns.
+                    dataTable.Columns.Add("ID", typeof(Guid));
                     dataTable.Columns.Add("Name", typeof(string));
                     dataTable.Columns.Add("Link", typeof(string));
 
                     foreach (var ent in result)
                     {
                         var name = (string)ent["name"];
-                        dataTable.Rows.Add(name, "link");
+                        dataTable.Rows.Add(ent.Id, name, "link");
                     }
 
                     // Bind the DataTable to the DataGridView.
@@ -287,12 +291,14 @@ namespace MyTool
                 }
             });
         }
- 
+
         private void GetSolutionJS()
         {
-            if (ComboboxSolutions.SelectedIndex == -1) { return; }
+            var fetchJS = wrCheck.Checked;
+            if (!fetchJS) return;
 
             var selectedSolution = ComboboxSolutions.SelectedItem as ListObject;
+            if (selectedSolution == null) return;
 
             var solutionId = selectedSolution.value;
 
@@ -304,6 +310,7 @@ namespace MyTool
 
             WorkAsync(new WorkAsyncInfo()
             {
+                Message = "Fetching webresources",
                 AsyncArgument = null,
                 Work = (worker, args) =>
                 {
@@ -375,56 +382,6 @@ namespace MyTool
             }
         }
 
-
-        private void LoadAPIsBtn_Click(object sender, EventArgs e)
-        {
-            ExecuteMethod(GetAPIs);
-        }
-
-        private void OnAPISelected(object sender, EventArgs e)
-        {
-            ExecuteMethod(GetSolutionFlows);
-            ExecuteMethod(GetSolutionJS);
-        }
-
-        private void OnSolutionSelected(object sender, EventArgs e)
-        {
-            ExecuteMethod(GetAPIs);
-        }
-
-        private void ListOfFlows_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void InitializeFlowView()
-        {
-        }
-
-        private void InitializeJSView()
-        {
-            DataTable dataTable = new DataTable();
-
-            // Define the columns.
-            dataTable.Columns.Add("ID", typeof(Guid));
-            dataTable.Columns.Add("Name", typeof(string));
-            dataTable.Columns.Add("Link", typeof(string));
-
-            JSGrid.DataSource = dataTable;
-            JSGrid.Columns["ID"].Visible = false;
-
-            // Add a button column to the DataGridView.
-            DataGridViewButtonColumn buttonColumn = new DataGridViewButtonColumn();
-            buttonColumn.HeaderText = "Info";
-            buttonColumn.Name = "InfoButton";
-            buttonColumn.Text = "View code";
-            buttonColumn.UseColumnTextForButtonValue = true;
-            JSGrid.Columns.Add(buttonColumn);
-
-            // Handle the CellContentClick event.
-            JSGrid.CellContentClick += ViewCodeClick;
-        }
-
         private void ShowCode(Guid id)
         {
             var api = ComboboxAPIs.SelectedItem as ListObject;
@@ -464,44 +421,110 @@ namespace MyTool
 
                         CodeText.Text = decodedString;
 
-                        int index = CodeText.Text.IndexOf(apiLogName);
-                        if (index >= 0)
+                        var index = 0;
+                        var count = 0;
+                        while (true)
                         {
-                            // Set the cursor position to the start of the word
+                            index = CodeText.Text.IndexOf(apiLogName, index);
+                            if (index < 0) break;
+
                             CodeText.SelectionStart = index;
-                            // Set the cursor length to the length of the word (select the word)
                             CodeText.SelectionLength = apiLogName.Length;
-                            // Scroll to the cursor
+                            CodeText.SelectionColor = Color.Red;
+
                             CodeText.ScrollToCaret();
 
-                            CodeText.SelectionColor = Color.Red;
+                            index += apiLogName.Length;
+
+                            count++;
                         }
+
+                        refCounter.Text = count + " references";
+
+                        //int index = CodeText.Text.IndexOf(apiLogName);
+                        //if (index >= 0)
+                        //{
+                        //    // Set the cursor position to the start of the word
+                        //    CodeText.SelectionStart = index;
+                        //    // Set the cursor length to the length of the word (select the word)
+                        //    CodeText.SelectionLength = apiLogName.Length;
+                        //    // Scroll to the cursor
+                        //    CodeText.ScrollToCaret();
+
+                        //    CodeText.SelectionColor = Color.Red;
+                        //}
                     }
                 }
 
             });
         }
 
-        private void OnJSSeleted2(object sender, EventArgs e)
+        private void LoadAPIsBtn_Click(object sender, EventArgs e)
         {
-            //if (ListOfJS.SelectedItems.Count != 1) return;
-            //ExecuteMethod(ShowCode);
+            ExecuteMethod(GetAPIs);
         }
 
-        private void Solution_Click(object sender, EventArgs e)
+        private void OnAPISelected(object sender, EventArgs e)
         {
-
+            ExecuteMethod(GetSolutionFlows);
+            ExecuteMethod(GetSolutionJS);
         }
 
-        private void OnJSSelected(object sender, EventArgs e)
+        private void OnSolutionSelected(object sender, EventArgs e)
         {
-            //if (ListOfJS.SelectedItems.Count != 1) return;
-            //ShowCode(id);
+            ExecuteMethod(GetSolutionFlows);
+            ExecuteMethod(GetSolutionJS);
         }
 
-        private void splitContainer1_Panel2_Paint(object sender, PaintEventArgs e)
+        private void InitializeFlowView()
         {
+            DataTable dataTable = new DataTable();
+            // Define the columns.
+            dataTable.Columns.Add("ID", typeof(Guid));
+            dataTable.Columns.Add("Name", typeof(string));
+            dataTable.Columns.Add("Link", typeof(string));
 
+            FlowsGrid.DataSource = dataTable;
+            FlowsGrid.Columns["ID"].Visible = false;
+
+            FlowsGrid.Columns["Name"].Width = 250;
+            FlowsGrid.Columns["Link"].Width = 50;
+        }
+
+        private void InitializeJSView()
+        {
+            DataTable dataTable = new DataTable();
+
+            // Define the columns.
+            dataTable.Columns.Add("ID", typeof(Guid));
+            dataTable.Columns.Add("Name", typeof(string));
+            dataTable.Columns.Add("Link", typeof(string));
+
+            JSGrid.DataSource = dataTable;
+            JSGrid.Columns["ID"].Visible = false;
+
+            JSGrid.Columns["Name"].Width = 250;
+            JSGrid.Columns["Link"].Width = 50;
+
+            if (JSGrid.Columns["InfoButton"] == null)
+            {
+                // Add a button column to the DataGridView
+                DataGridViewButtonColumn buttonColumn = new DataGridViewButtonColumn();
+                buttonColumn.HeaderText = "Info";
+                buttonColumn.Name = "InfoButton";
+                buttonColumn.Text = "Code";
+                buttonColumn.UseColumnTextForButtonValue = true;
+                buttonColumn.Width = 50;
+                JSGrid.Columns.Add(buttonColumn);
+            }
+
+            // Handle the CellContentClick event
+            JSGrid.CellContentClick -= ViewCodeClick;
+
+            // Handle the CellContentClick event.
+            JSGrid.CellContentClick += ViewCodeClick;
+
+            refCounter.Text = "0 references";
         }
 
 
@@ -510,12 +533,23 @@ namespace MyTool
             ExecuteMethod(GetSolutions);
         }
 
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void FlowsCheck_CheckedChanged(object sender, EventArgs e)
         {
+            var check = flowsCheck.Checked;
 
+            if (check) ExecuteMethod(GetSolutionFlows);
+            else InitializeFlowView();
         }
 
-        private void label1_Click(object sender, EventArgs e)
+        private void WrCheck_CheckedChanged(object sender, EventArgs e)
+        {
+            var check = wrCheck.Checked;
+
+            if (check) ExecuteMethod(GetSolutionJS);
+            else InitializeJSView();
+        }
+
+        private void refCounter_Click(object sender, EventArgs e)
         {
 
         }
