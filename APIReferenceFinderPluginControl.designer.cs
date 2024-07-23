@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace MyTool
+namespace APIReferenceFinder
 {
-    partial class MyPluginControl
+    partial class APIReferenceFinderPluginControl
     {
         /// <summary> 
         /// Variable nécessaire au concepteur.
@@ -30,7 +30,7 @@ namespace MyTool
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MyPluginControl));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(APIReferenceFinderPluginControl));
             this.ComboboxAPIs = new System.Windows.Forms.ComboBox();
             this.toolStrip2 = new System.Windows.Forms.ToolStrip();
             this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();

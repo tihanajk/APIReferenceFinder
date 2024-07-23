@@ -12,13 +12,13 @@ using System.Reflection;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility;
 
-namespace MyTool
+namespace APIReferenceFinder
 {
-    public partial class MyPluginControl : PluginControlBase
+    public partial class APIReferenceFinderPluginControl : PluginControlBase
     {
         private Settings mySettings;
 
-        public MyPluginControl()
+        public APIReferenceFinderPluginControl()
         {
             InitializeComponent();
             InitializeFlowView();

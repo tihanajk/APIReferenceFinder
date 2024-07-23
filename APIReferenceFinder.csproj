@@ -8,8 +8,8 @@
     <ProjectGuid>{DAB4B6F5-5B11-43C2-ADB1-A122AC7A840A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MyTool</RootNamespace>
-    <AssemblyName>MyTool</AssemblyName>
+    <RootNamespace>APIReferenceFinder</RootNamespace>
+    <AssemblyName>APIReferenceFinder</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>
@@ -169,12 +169,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MyPlugin.cs" />
-    <Compile Include="MyPluginControl.cs">
+    <Compile Include="APIReferenceFinderPlugin.cs" />
+    <Compile Include="APIReferenceFinderPluginControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="MyPluginControl.designer.cs">
-      <DependentUpon>MyPluginControl.cs</DependentUpon>
+    <Compile Include="APIReferenceFinderPluginControl.designer.cs">
+      <DependentUpon>APIReferenceFinderPluginControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -189,8 +189,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="MyPluginControl.resx">
-      <DependentUpon>MyPluginControl.cs</DependentUpon>
+    <EmbeddedResource Include="APIReferenceFinderPluginControl.resx">
+      <DependentUpon>APIReferenceFinderPluginControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
