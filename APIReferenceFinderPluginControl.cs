@@ -25,6 +25,8 @@ namespace APIReferenceFinder
             InitializeComponent();
             InitializeFlowView();
             InitializeJSView();
+
+            GetSolutions();
         }
 
         private void MyPluginControl_Load(object sender, EventArgs e)
@@ -151,18 +153,24 @@ namespace APIReferenceFinder
 
                     if (result != null)
                     {
-
                         var items = new List<ListObject>();
+
+                        items.Add(new ListObject()
+                        {
+                            name = "<All Solutions>",
+                            value = "1"
+                        });
+
                         foreach (var sol in result.Entities)
                         {
                             var friendlyName = sol.Contains("friendlyname") ? (string)sol["friendlyname"] : "";
                             var name = $"{friendlyName} ({sol["uniquename"]})";
-                            var value = sol.Id.ToString();
+                            var solutionId = sol.Id.ToString();
 
                             items.Add(new ListObject()
                             {
                                 name = name,
-                                value = value,
+                                value = solutionId,
                             });
                         }
 
@@ -176,6 +184,14 @@ namespace APIReferenceFinder
 
         private void GetAPIs()
         {
+            ComboboxAPIs.DataSource = new List<ListObject>();
+
+            var selectedSolution = ComboboxSolutions.SelectedItem as ListObject;
+
+            if (selectedSolution == null) return;
+
+            var solutionId = selectedSolution.value;
+
             WorkAsync(new WorkAsyncInfo()
             {
                 Message = "Getting APIs",
@@ -185,6 +201,14 @@ namespace APIReferenceFinder
                     var query = new QueryExpression("customapi");
                     query.ColumnSet.AddColumns("customapiid", "displayname", "uniquename");
                     query.AddOrder("displayname", OrderType.Ascending);
+
+                    if (solutionId != "1")
+                    {
+                        var aa = query.AddLink("solutioncomponent", "customapiid", "objectid");
+                        aa.EntityAlias = "aa";
+                        aa.LinkCriteria.AddCondition("solutionid", ConditionOperator.Equal, solutionId);
+                    }
+
                     args.Result = Service.RetrieveMultiple(query);
                 },
                 PostWorkCallBack = (args) =>
@@ -195,7 +219,12 @@ namespace APIReferenceFinder
                     }
                     var result = args.Result as EntityCollection;
 
-                    ComboboxAPIs.DataSource = new List<ListObject>();
+                    if (result.Entities.Count == 0)
+                    {
+                        ComboboxAPIs.SelectedIndex = -1;
+                        ComboboxAPIs.Text = "";
+                        OnAPISelected(ComboboxAPIs, EventArgs.Empty);
+                    }
 
                     if (result != null)
                     {
@@ -230,7 +259,7 @@ namespace APIReferenceFinder
             var solutionId = selectedSolution.value;
 
             var api = ComboboxAPIs.SelectedItem as ListObject;
-            if (api == null) return;
+            if (api == null) { InitializeFlowView(); return; }
 
             var apiLogName = api.value;
             if (apiLogName == null) return;
@@ -241,34 +270,29 @@ namespace APIReferenceFinder
                 AsyncArgument = null,
                 Work = (worker, args) =>
                 {
+                    var solutionFilter = solutionId != "1" ?
+                            $@"<link-entity name='solutioncomponent' from='objectid' to='workflowid' link-type='inner' alias='aa'>
+                                  <filter>
+                                    <condition attribute='solutionid' operator='eq' value='{solutionId}' />
+                                  </filter>
+                                </link-entity>" : "";
+
                     var fetchXml = $@"<fetch>
-                              <entity name=""workflow"">
-                                <attribute name=""workflowid"" />
-                                <attribute name=""workflowidunique"" />
-                                <attribute name=""name"" />
-                                <filter type=""and"">
-                                  <condition attribute=""category"" operator=""eq"" value=""5"" />
-                                  <condition attribute=""clientdata"" operator=""like"" value=""%&quot;actionName&quot;:&quot;{apiLogName}&quot;,%"" />
+                              <entity name='workflow'>
+                                <attribute name='workflowid' />
+                                <attribute name='workflowidunique' />
+                                <attribute name='name' />
+                                <filter type='and'>
+                                  <condition attribute='category' operator='eq' value='5' />
+                                  <condition attribute='clientdata' operator='like' value='%&quot;actionName&quot;:&quot;{apiLogName}&quot;,%' />
                                 </filter>
-                                <order attribute=""name"" />
+                                {solutionFilter}
+                                <order attribute='name' />
                               </entity>
                             </fetch>";
                     var flowsList = Service.RetrieveMultiple(new FetchExpression(fetchXml)).Entities.ToList();
 
-                    var query_solutionid = solutionId;
-                    var query_componenttype = 29;
-
-                    var query = new QueryExpression("solutioncomponent");
-                    query.ColumnSet.AllColumns = true;
-                    query.Criteria.AddCondition("solutionid", ConditionOperator.Equal, query_solutionid);
-                    query.Criteria.AddCondition("componenttype", ConditionOperator.Equal, query_componenttype);
-
-                    var solutionComponents = Service.RetrieveMultiple(query).Entities;
-                    var ids = solutionComponents.Select(c => c["objectid"]).ToList();
-
-                    var filtered = flowsList.Where(f => ids.Contains(f.Id)).ToList();
-
-                    args.Result = filtered;
+                    args.Result = flowsList;
                 },
                 PostWorkCallBack = (args) =>
                 {
@@ -277,6 +301,11 @@ namespace APIReferenceFinder
                         MessageBox.Show(args.Error.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                     var result = args.Result as List<Entity>;
+                    if (result == null || result.Count == 0)
+                    {
+                        InitializeFlowView();
+                        return;
+                    }
 
                     DataTable dataTable = new DataTable();
 
@@ -284,7 +313,6 @@ namespace APIReferenceFinder
                     dataTable.Columns.Add("ID", typeof(Guid));
                     dataTable.Columns.Add("Name", typeof(string));
                     dataTable.Columns.Add("Link", typeof(string));
-
 
                     foreach (var ent in result)
                     {
@@ -297,7 +325,7 @@ namespace APIReferenceFinder
                     // Bind the DataTable to the DataGridView.
                     FlowsGrid.DataSource = dataTable;
 
-                    
+
                 }
             });
         }
@@ -318,29 +346,31 @@ namespace APIReferenceFinder
             var apiLogName = api.value;
             if (apiLogName == null) return;
 
+            if (solutionId == "1")
+            {
+                MessageBox.Show("not recommended to fetch webresources from all solutions");
+                return;
+            }
+
             WorkAsync(new WorkAsyncInfo()
             {
                 Message = "Fetching webresources",
                 AsyncArgument = null,
                 Work = (worker, args) =>
                 {
-
-                    var query_solutionid = solutionId;
-                    var query_componenttype = 61;
-
-                    var query = new QueryExpression("solutioncomponent");
+                    var aa_solutionid = solutionId;
+                    var query = new QueryExpression("webresource");
                     query.ColumnSet.AllColumns = true;
-                    query.Criteria.AddCondition("solutionid", ConditionOperator.Equal, query_solutionid);
-                    query.Criteria.AddCondition("componenttype", ConditionOperator.Equal, query_componenttype);
+                    query.AddOrder("name", OrderType.Ascending);
 
-                    var solutionComponents = Service.RetrieveMultiple(query).Entities;
-
-                    var webresourcesList = new List<Entity>();
-                    foreach (var comp in solutionComponents)
+                    if (solutionId != "1")
                     {
-                        var wr = Service.Retrieve("webresource", (Guid)comp["objectid"], new ColumnSet("webresourceid", "displayname", "name", "content"));
-                        webresourcesList.Add(wr);
+                        var aa = query.AddLink("solutioncomponent", "webresourceid", "objectid");
+                        aa.EntityAlias = "aa";
+                        aa.LinkCriteria.AddCondition("solutionid", ConditionOperator.Equal, aa_solutionid);
                     }
+
+                    var webresourcesList = Service.RetrieveMultiple(query).Entities.ToList();
 
                     args.Result = webresourcesList;
                 },
@@ -351,31 +381,34 @@ namespace APIReferenceFinder
                         MessageBox.Show(args.Error.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                     var result = args.Result as List<Entity>;
+                    if (result == null || result.Count == 0)
+                    {
+                        InitializeJSView();
+                        return;
+                    }
 
                     DataTable dataTable = new DataTable();
+
                     // Define the columns.
                     dataTable.Columns.Add("ID", typeof(Guid));
                     dataTable.Columns.Add("Name", typeof(string));
                     dataTable.Columns.Add("Link", typeof(string));
 
-                    if (result != null)
+                    foreach (var resource in result)
                     {
-                        var items = new List<ListObject>();
-                        foreach (var resource in result)
-                        {
-                            var content = (string)resource["content"];
+                        var content = (string)resource["content"];
 
-                            byte[] data = Convert.FromBase64String(content);
-                            string decodedString = System.Text.Encoding.UTF8.GetString(data);
+                        byte[] data = Convert.FromBase64String(content);
+                        string decodedString = System.Text.Encoding.UTF8.GetString(data);
 
-                            if (!decodedString.Contains(apiLogName)) continue;
+                        if (!decodedString.Contains(apiLogName)) continue;
 
-                            var name = (string)resource["name"];
-                            var id = (Guid)resource["webresourceid"];
+                        var name = (string)resource["name"];
+                        var id = (Guid)resource["webresourceid"];
 
-                            dataTable.Rows.Add(id, name, "link");
-                        }
+                        dataTable.Rows.Add(id, name, "link");
                     }
+
                     JSGrid.DataSource = dataTable;
 
                 }
@@ -433,6 +466,7 @@ namespace APIReferenceFinder
 
                         var index = 0;
                         var count = 0;
+                        var first = true;
                         while (true)
                         {
                             index = CodeText.Text.IndexOf(apiLogName, index);
@@ -442,7 +476,7 @@ namespace APIReferenceFinder
                             CodeText.SelectionLength = apiLogName.Length;
                             CodeText.SelectionColor = Color.Red;
 
-                            CodeText.ScrollToCaret();
+                            if (first) { CodeText.ScrollToCaret(); first = false; }
 
                             index += apiLogName.Length;
 
@@ -451,7 +485,7 @@ namespace APIReferenceFinder
 
                         refCounter.Text = count + " references";
 
-                        MessageBox.Show(count + " occurances");
+                        //MessageBox.Show(count + " occurances");
 
                         //int index = CodeText.Text.IndexOf(apiLogName);
                         //if (index >= 0)
@@ -484,8 +518,9 @@ namespace APIReferenceFinder
 
         private void OnSolutionSelected(object sender, EventArgs e)
         {
-            ExecuteMethod(GetSolutionFlows);
-            ExecuteMethod(GetSolutionJS);
+            ExecuteMethod(GetAPIs);
+            //ExecuteMethod(GetSolutionFlows);
+            //ExecuteMethod(GetSolutionJS);
         }
 
         private void InitializeFlowView()
@@ -498,9 +533,45 @@ namespace APIReferenceFinder
 
             FlowsGrid.DataSource = dataTable;
             FlowsGrid.Columns["ID"].Visible = false;
+            FlowsGrid.Columns["Link"].Visible = false;
 
             FlowsGrid.Columns["Name"].Width = 250;
-            FlowsGrid.Columns["Link"].Width = 150;
+            if (FlowsGrid.Columns["LinkButton"] == null)
+            {
+                // Add a button column to the DataGridView
+                DataGridViewButtonColumn buttonColumn = new DataGridViewButtonColumn();
+                buttonColumn.HeaderText = "Link";
+                buttonColumn.Name = "LinkButton";
+                buttonColumn.Text = "Get Link";
+                buttonColumn.UseColumnTextForButtonValue = true;
+                buttonColumn.Width = 100;
+                FlowsGrid.Columns.Add(buttonColumn);
+            }
+
+            // Handle the CellContentClick event
+            FlowsGrid.CellContentClick -= CopyFlowLink;
+
+            // Handle the CellContentClick event.
+            FlowsGrid.CellContentClick += CopyFlowLink;
+        }
+
+        private void CopyFlowLink(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex == FlowsGrid.Columns["LinkButton"].Index && e.RowIndex >= 0)
+            {
+                int rowIndex = e.RowIndex;
+                var link = (string)FlowsGrid.Rows[rowIndex].Cells["Link"].Value;
+
+                if (!string.IsNullOrEmpty(link))
+                {
+                    Clipboard.SetText(link);
+                    MessageBox.Show("Link copied to clipboard.");
+                }
+                else
+                {
+                    MessageBox.Show("No text to copy.");
+                }
+            }
         }
 
         private void InitializeJSView()
