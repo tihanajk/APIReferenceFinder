@@ -426,6 +426,9 @@ namespace APIReferenceFinder
             }
         }
 
+        List<int> listOfReferences = new List<int>();
+        int currentRef = 0;
+
         private void ShowCode(Guid id)
         {
             var api = ComboboxAPIs.SelectedItem as ListObject;
@@ -473,11 +476,13 @@ namespace APIReferenceFinder
                             index = CodeText.Text.IndexOf(apiLogName, index);
                             if (index < 0) break;
 
+                            listOfReferences.Add(index);
+
                             CodeText.SelectionStart = index;
                             CodeText.SelectionLength = apiLogName.Length;
                             CodeText.SelectionColor = Color.Red;
 
-                            if (first) { CodeText.ScrollToCaret(); first = false; }
+                            if (first) { CodeText.ScrollToCaret(); first = false; currentRef = index; }
 
                             index += apiLogName.Length;
 
@@ -646,6 +651,36 @@ namespace APIReferenceFinder
             {
                 MessageBox.Show("An error occurred while trying to open the link: " + ex.Message);
             }
+        }
+
+        private void GoToInCode(int step)
+        {
+            if (listOfReferences.Count == 0) return;
+            var current = listOfReferences.IndexOf(currentRef);
+            if (current == 0 && step == -1) current = listOfReferences.Count;
+            else if (current == listOfReferences.Count - 1 && step == 1) current = -1;
+
+            var next = current + step;
+            if (next <= -1 || next >= listOfReferences.Count) return;
+
+            currentRef = listOfReferences[next];
+
+            CodeText.SelectionStart = currentRef;
+            CodeText.ScrollToCaret();
+        }
+
+        private void PrevRefBtn_Click(object sender, EventArgs e)
+        {
+            if (CodeText.Text == "" || CodeText.Text == null) return;
+            var step = -1;
+            GoToInCode(step);
+        }
+
+        private void NextRefBtn_Click(object sender, EventArgs e)
+        {
+            if (CodeText.Text == "" || CodeText.Text == null) return;
+            var step = 1;
+            GoToInCode(step);
         }
     }
 }

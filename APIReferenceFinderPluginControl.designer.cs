@@ -51,6 +51,8 @@ namespace APIReferenceFinder
             this.toolStrip2 = new System.Windows.Forms.ToolStrip();
             this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
+            this.prevRefBtn = new System.Windows.Forms.Button();
+            this.nextRefBtn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.FlowsGrid)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.JSGrid)).BeginInit();
             this.toolStrip2.SuspendLayout();
@@ -61,7 +63,7 @@ namespace APIReferenceFinder
             this.ComboboxAPIs.FormattingEnabled = true;
             this.ComboboxAPIs.Location = new System.Drawing.Point(458, 70);
             this.ComboboxAPIs.Name = "ComboboxAPIs";
-            this.ComboboxAPIs.Size = new System.Drawing.Size(291, 32);
+            this.ComboboxAPIs.Size = new System.Drawing.Size(291, 21);
             this.ComboboxAPIs.TabIndex = 1;
             this.ComboboxAPIs.SelectedIndexChanged += new System.EventHandler(this.OnAPISelected);
             // 
@@ -71,7 +73,7 @@ namespace APIReferenceFinder
             this.label1.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.label1.Location = new System.Drawing.Point(19, 108);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(69, 25);
+            this.label1.Size = new System.Drawing.Size(37, 13);
             this.label1.TabIndex = 5;
             this.label1.Text = "Flows:";
             // 
@@ -81,7 +83,7 @@ namespace APIReferenceFinder
             this.label2.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.label2.Location = new System.Drawing.Point(444, 108);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(146, 25);
+            this.label2.Size = new System.Drawing.Size(79, 13);
             this.label2.TabIndex = 7;
             this.label2.Text = "Webresources:";
             // 
@@ -90,7 +92,7 @@ namespace APIReferenceFinder
             this.ComboboxSolutions.FormattingEnabled = true;
             this.ComboboxSolutions.Location = new System.Drawing.Point(22, 72);
             this.ComboboxSolutions.Name = "ComboboxSolutions";
-            this.ComboboxSolutions.Size = new System.Drawing.Size(291, 32);
+            this.ComboboxSolutions.Size = new System.Drawing.Size(291, 21);
             this.ComboboxSolutions.TabIndex = 8;
             this.ComboboxSolutions.SelectedIndexChanged += new System.EventHandler(this.OnSolutionSelected);
             // 
@@ -101,7 +103,7 @@ namespace APIReferenceFinder
             this.Solution.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.Solution.Location = new System.Drawing.Point(19, 52);
             this.Solution.Name = "Solution";
-            this.Solution.Size = new System.Drawing.Size(98, 25);
+            this.Solution.Size = new System.Drawing.Size(57, 13);
             this.Solution.TabIndex = 9;
             this.Solution.Text = "Solution:";
             // 
@@ -112,7 +114,7 @@ namespace APIReferenceFinder
             this.label3.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.label3.Location = new System.Drawing.Point(455, 54);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(54, 25);
+            this.label3.Size = new System.Drawing.Size(31, 13);
             this.label3.TabIndex = 10;
             this.label3.Text = "API:";
             // 
@@ -122,7 +124,7 @@ namespace APIReferenceFinder
             this.label4.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.label4.Location = new System.Drawing.Point(875, 108);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(66, 25);
+            this.label4.Size = new System.Drawing.Size(35, 13);
             this.label4.TabIndex = 12;
             this.label4.Text = "Code:";
             // 
@@ -130,7 +132,7 @@ namespace APIReferenceFinder
             // 
             this.CodeText.Location = new System.Drawing.Point(880, 136);
             this.CodeText.Name = "CodeText";
-            this.CodeText.Size = new System.Drawing.Size(536, 578);
+            this.CodeText.Size = new System.Drawing.Size(547, 578);
             this.CodeText.TabIndex = 13;
             this.CodeText.Text = "";
             // 
@@ -163,7 +165,7 @@ namespace APIReferenceFinder
             this.managedCheck.AutoSize = true;
             this.managedCheck.Location = new System.Drawing.Point(344, 56);
             this.managedCheck.Name = "managedCheck";
-            this.managedCheck.Size = new System.Drawing.Size(121, 29);
+            this.managedCheck.Size = new System.Drawing.Size(71, 17);
             this.managedCheck.TabIndex = 16;
             this.managedCheck.Text = "Managed";
             this.managedCheck.UseVisualStyleBackColor = true;
@@ -175,7 +177,7 @@ namespace APIReferenceFinder
             this.unmanagedCheck.CheckState = System.Windows.Forms.CheckState.Checked;
             this.unmanagedCheck.Location = new System.Drawing.Point(344, 79);
             this.unmanagedCheck.Name = "unmanagedCheck";
-            this.unmanagedCheck.Size = new System.Drawing.Size(145, 29);
+            this.unmanagedCheck.Size = new System.Drawing.Size(84, 17);
             this.unmanagedCheck.TabIndex = 17;
             this.unmanagedCheck.Text = "Unmanaged";
             this.unmanagedCheck.UseVisualStyleBackColor = true;
@@ -187,7 +189,7 @@ namespace APIReferenceFinder
             this.flowsCheck.CheckState = System.Windows.Forms.CheckState.Checked;
             this.flowsCheck.Location = new System.Drawing.Point(780, 56);
             this.flowsCheck.Name = "flowsCheck";
-            this.flowsCheck.Size = new System.Drawing.Size(89, 29);
+            this.flowsCheck.Size = new System.Drawing.Size(53, 17);
             this.flowsCheck.TabIndex = 18;
             this.flowsCheck.Text = "Flows";
             this.flowsCheck.UseVisualStyleBackColor = true;
@@ -198,7 +200,7 @@ namespace APIReferenceFinder
             this.wrCheck.AutoSize = true;
             this.wrCheck.Location = new System.Drawing.Point(780, 76);
             this.wrCheck.Name = "wrCheck";
-            this.wrCheck.Size = new System.Drawing.Size(166, 29);
+            this.wrCheck.Size = new System.Drawing.Size(95, 17);
             this.wrCheck.TabIndex = 19;
             this.wrCheck.Text = "Webresources";
             this.wrCheck.UseVisualStyleBackColor = true;
@@ -207,9 +209,9 @@ namespace APIReferenceFinder
             // refCounter
             // 
             this.refCounter.AutoSize = true;
-            this.refCounter.Location = new System.Drawing.Point(1254, 108);
+            this.refCounter.Location = new System.Drawing.Point(1237, 108);
             this.refCounter.Name = "refCounter";
-            this.refCounter.Size = new System.Drawing.Size(120, 25);
+            this.refCounter.Size = new System.Drawing.Size(66, 13);
             this.refCounter.TabIndex = 20;
             this.refCounter.Text = "0 references";
             // 
@@ -218,7 +220,7 @@ namespace APIReferenceFinder
             this.toolStripButton3.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton3.Image")));
             this.toolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton3.Name = "toolStripButton3";
-            this.toolStripButton3.Size = new System.Drawing.Size(181, 34);
+            this.toolStripButton3.Size = new System.Drawing.Size(117, 32);
             this.toolStripButton3.Text = "Load Solutions";
             this.toolStripButton3.Click += new System.EventHandler(this.LoadSolutionsBtnClick);
             // 
@@ -227,7 +229,7 @@ namespace APIReferenceFinder
             this.LoadButton.Image = ((System.Drawing.Image)(resources.GetObject("LoadButton.Image")));
             this.LoadButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.LoadButton.Name = "LoadButton";
-            this.LoadButton.Size = new System.Drawing.Size(137, 34);
+            this.LoadButton.Size = new System.Drawing.Size(91, 32);
             this.LoadButton.Text = "Load APIs";
             this.LoadButton.Visible = false;
             this.LoadButton.Click += new System.EventHandler(this.LoadAPIsBtn_Click);
@@ -241,7 +243,7 @@ namespace APIReferenceFinder
             this.toolStripButton4});
             this.toolStrip2.Location = new System.Drawing.Point(0, 0);
             this.toolStrip2.Name = "toolStrip2";
-            this.toolStrip2.Size = new System.Drawing.Size(1666, 40);
+            this.toolStrip2.Size = new System.Drawing.Size(1666, 35);
             this.toolStrip2.TabIndex = 3;
             this.toolStrip2.Text = "toolStrip2";
             // 
@@ -250,13 +252,35 @@ namespace APIReferenceFinder
             this.toolStripButton4.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton4.Image")));
             this.toolStripButton4.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton4.Name = "toolStripButton4";
-            this.toolStripButton4.Size = new System.Drawing.Size(176, 34);
+            this.toolStripButton4.Size = new System.Drawing.Size(114, 32);
             this.toolStripButton4.Text = "Go to solution";
             this.toolStripButton4.Click += new System.EventHandler(this.GoTOSolutionButton);
+            // 
+            // prevRefBtn
+            // 
+            this.prevRefBtn.Location = new System.Drawing.Point(1309, 101);
+            this.prevRefBtn.Name = "prevRefBtn";
+            this.prevRefBtn.Size = new System.Drawing.Size(39, 25);
+            this.prevRefBtn.TabIndex = 22;
+            this.prevRefBtn.Text = "prev";
+            this.prevRefBtn.UseVisualStyleBackColor = true;
+            this.prevRefBtn.Click += new System.EventHandler(this.PrevRefBtn_Click);
+            // 
+            // nextRefBtn
+            // 
+            this.nextRefBtn.Location = new System.Drawing.Point(1354, 101);
+            this.nextRefBtn.Name = "nextRefBtn";
+            this.nextRefBtn.Size = new System.Drawing.Size(39, 25);
+            this.nextRefBtn.TabIndex = 23;
+            this.nextRefBtn.Text = "next";
+            this.nextRefBtn.UseVisualStyleBackColor = true;
+            this.nextRefBtn.Click += new System.EventHandler(this.NextRefBtn_Click);
             // 
             // APIReferenceFinderPluginControl
             // 
             this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.Controls.Add(this.nextRefBtn);
+            this.Controls.Add(this.prevRefBtn);
             this.Controls.Add(this.refCounter);
             this.Controls.Add(this.wrCheck);
             this.Controls.Add(this.flowsCheck);
@@ -318,5 +342,7 @@ namespace APIReferenceFinder
         private System.Windows.Forms.ToolStrip toolStrip2;
         private System.Windows.Forms.HelpProvider helpProvider1;
         private System.Windows.Forms.ToolStripButton toolStripButton4;
+        private System.Windows.Forms.Button prevRefBtn;
+        private System.Windows.Forms.Button nextRefBtn;
     }
 }
