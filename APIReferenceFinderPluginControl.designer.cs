@@ -49,6 +49,7 @@ namespace APIReferenceFinder
             this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
             this.LoadButton = new System.Windows.Forms.ToolStripButton();
             this.toolStrip2 = new System.Windows.Forms.ToolStrip();
+            this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
             ((System.ComponentModel.ISupportInitialize)(this.FlowsGrid)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.JSGrid)).BeginInit();
@@ -78,7 +79,7 @@ namespace APIReferenceFinder
             // 
             this.label2.AutoSize = true;
             this.label2.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label2.Location = new System.Drawing.Point(431, 108);
+            this.label2.Location = new System.Drawing.Point(444, 108);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(146, 25);
             this.label2.TabIndex = 7;
@@ -119,7 +120,7 @@ namespace APIReferenceFinder
             // 
             this.label4.AutoSize = true;
             this.label4.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label4.Location = new System.Drawing.Point(879, 108);
+            this.label4.Location = new System.Drawing.Point(875, 108);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(66, 25);
             this.label4.TabIndex = 12;
@@ -127,12 +128,11 @@ namespace APIReferenceFinder
             // 
             // CodeText
             // 
-            this.CodeText.Location = new System.Drawing.Point(884, 136);
+            this.CodeText.Location = new System.Drawing.Point(880, 136);
             this.CodeText.Name = "CodeText";
             this.CodeText.Size = new System.Drawing.Size(536, 578);
             this.CodeText.TabIndex = 13;
             this.CodeText.Text = "";
-            this.CodeText.TextChanged += new System.EventHandler(this.CodeText_TextChanged);
             // 
             // FlowsGrid
             // 
@@ -151,11 +151,11 @@ namespace APIReferenceFinder
             this.JSGrid.AllowUserToAddRows = false;
             this.JSGrid.AllowUserToDeleteRows = false;
             this.JSGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.JSGrid.Location = new System.Drawing.Point(436, 136);
+            this.JSGrid.Location = new System.Drawing.Point(449, 136);
             this.JSGrid.Name = "JSGrid";
             this.JSGrid.RowHeadersWidth = 72;
             this.JSGrid.RowTemplate.Height = 31;
-            this.JSGrid.Size = new System.Drawing.Size(433, 578);
+            this.JSGrid.Size = new System.Drawing.Size(406, 578);
             this.JSGrid.TabIndex = 15;
             // 
             // managedCheck
@@ -212,7 +212,6 @@ namespace APIReferenceFinder
             this.refCounter.Size = new System.Drawing.Size(120, 25);
             this.refCounter.TabIndex = 20;
             this.refCounter.Text = "0 references";
-            this.refCounter.Click += new System.EventHandler(this.refCounter_Click);
             // 
             // toolStripButton3
             // 
@@ -230,6 +229,7 @@ namespace APIReferenceFinder
             this.LoadButton.Name = "LoadButton";
             this.LoadButton.Size = new System.Drawing.Size(137, 34);
             this.LoadButton.Text = "Load APIs";
+            this.LoadButton.Visible = false;
             this.LoadButton.Click += new System.EventHandler(this.LoadAPIsBtn_Click);
             // 
             // toolStrip2
@@ -237,12 +237,22 @@ namespace APIReferenceFinder
             this.toolStrip2.ImageScalingSize = new System.Drawing.Size(28, 28);
             this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButton3,
-            this.LoadButton});
+            this.LoadButton,
+            this.toolStripButton4});
             this.toolStrip2.Location = new System.Drawing.Point(0, 0);
             this.toolStrip2.Name = "toolStrip2";
             this.toolStrip2.Size = new System.Drawing.Size(1666, 40);
             this.toolStrip2.TabIndex = 3;
             this.toolStrip2.Text = "toolStrip2";
+            // 
+            // toolStripButton4
+            // 
+            this.toolStripButton4.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton4.Image")));
+            this.toolStripButton4.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton4.Name = "toolStripButton4";
+            this.toolStripButton4.Size = new System.Drawing.Size(176, 34);
+            this.toolStripButton4.Text = "Go to solution";
+            this.toolStripButton4.Click += new System.EventHandler(this.GoTOSolutionButton);
             // 
             // APIReferenceFinderPluginControl
             // 
@@ -307,5 +317,6 @@ namespace APIReferenceFinder
         private System.Windows.Forms.ToolStripButton LoadButton;
         private System.Windows.Forms.ToolStrip toolStrip2;
         private System.Windows.Forms.HelpProvider helpProvider1;
+        private System.Windows.Forms.ToolStripButton toolStripButton4;
     }
 }

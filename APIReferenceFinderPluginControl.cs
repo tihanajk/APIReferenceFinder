@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlTypes;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
@@ -31,7 +32,7 @@ namespace APIReferenceFinder
 
         private void MyPluginControl_Load(object sender, EventArgs e)
         {
-            ShowInfoNotification("Hello there", new Uri("https://www.google.com/"));
+            //ShowInfoNotification("Hello there", new Uri("https://www.google.com/"));
 
             // Loads or creates the settings for the plugin
             if (!SettingsManager.Instance.TryLoad(GetType(), out mySettings))
@@ -392,7 +393,7 @@ namespace APIReferenceFinder
                     // Define the columns.
                     dataTable.Columns.Add("ID", typeof(Guid));
                     dataTable.Columns.Add("Name", typeof(string));
-                    dataTable.Columns.Add("Link", typeof(string));
+                    //dataTable.Columns.Add("Link", typeof(string));
 
                     foreach (var resource in result)
                     {
@@ -406,7 +407,7 @@ namespace APIReferenceFinder
                         var name = (string)resource["name"];
                         var id = (Guid)resource["webresourceid"];
 
-                        dataTable.Rows.Add(id, name, "link");
+                        dataTable.Rows.Add(id, name);
                     }
 
                     JSGrid.DataSource = dataTable;
@@ -542,9 +543,9 @@ namespace APIReferenceFinder
                 DataGridViewButtonColumn buttonColumn = new DataGridViewButtonColumn();
                 buttonColumn.HeaderText = "Link";
                 buttonColumn.Name = "LinkButton";
-                buttonColumn.Text = "Get Link";
+                buttonColumn.Text = "Copy Link";
                 buttonColumn.UseColumnTextForButtonValue = true;
-                buttonColumn.Width = 100;
+                buttonColumn.Width = 80;
                 FlowsGrid.Columns.Add(buttonColumn);
             }
 
@@ -562,15 +563,8 @@ namespace APIReferenceFinder
                 int rowIndex = e.RowIndex;
                 var link = (string)FlowsGrid.Rows[rowIndex].Cells["Link"].Value;
 
-                if (!string.IsNullOrEmpty(link))
-                {
-                    Clipboard.SetText(link);
-                    MessageBox.Show("Link copied to clipboard.");
-                }
-                else
-                {
-                    MessageBox.Show("No text to copy.");
-                }
+                Clipboard.SetText(link);
+                MessageBox.Show("Flow link copied to clipboard.");
             }
         }
 
@@ -581,13 +575,11 @@ namespace APIReferenceFinder
             // Define the columns.
             dataTable.Columns.Add("ID", typeof(Guid));
             dataTable.Columns.Add("Name", typeof(string));
-            dataTable.Columns.Add("Link", typeof(string));
 
             JSGrid.DataSource = dataTable;
             JSGrid.Columns["ID"].Visible = false;
 
             JSGrid.Columns["Name"].Width = 250;
-            JSGrid.Columns["Link"].Width = 50;
 
             if (JSGrid.Columns["InfoButton"] == null)
             {
@@ -595,9 +587,9 @@ namespace APIReferenceFinder
                 DataGridViewButtonColumn buttonColumn = new DataGridViewButtonColumn();
                 buttonColumn.HeaderText = "Info";
                 buttonColumn.Name = "InfoButton";
-                buttonColumn.Text = "Code";
+                buttonColumn.Text = "View Code";
                 buttonColumn.UseColumnTextForButtonValue = true;
-                buttonColumn.Width = 50;
+                buttonColumn.Width = 80;
                 JSGrid.Columns.Add(buttonColumn);
             }
 
@@ -632,14 +624,28 @@ namespace APIReferenceFinder
             else InitializeJSView();
         }
 
-        private void refCounter_Click(object sender, EventArgs e)
+
+        private void GoTOSolutionButton(object sender, EventArgs e)
         {
+            var selectedSolution = ComboboxSolutions.SelectedItem as ListObject;
+            if (selectedSolution == null) return;
 
-        }
+            var solutionId = selectedSolution.value;
+            string url = $"https://make.powerapps.com/environments/{ENV_ID}/solutions/{solutionId}";
 
-        private void CodeText_TextChanged(object sender, EventArgs e)
-        {
-
+            if (solutionId == "1") return;
+            try
+            {
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = url,
+                    UseShellExecute = true
+                });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error occurred while trying to open the link: " + ex.Message);
+            }
         }
     }
 }
