@@ -18,6 +18,8 @@ namespace APIReferenceFinder
     {
         private Settings mySettings;
 
+        private string ENV_ID = "";
+
         public APIReferenceFinderPluginControl()
         {
             InitializeComponent();
@@ -98,6 +100,8 @@ namespace APIReferenceFinder
         public override void UpdateConnection(IOrganizationService newService, ConnectionDetail detail, string actionName, object parameter)
         {
             base.UpdateConnection(newService, detail, actionName, parameter);
+
+            ENV_ID = detail.EnvironmentId;
 
             if (mySettings != null && detail != null)
             {
@@ -217,7 +221,7 @@ namespace APIReferenceFinder
         private void GetSolutionFlows()
         {
             var fetchFlows = flowsCheck.Checked;
-            if (!fetchFlows) return;            
+            if (!fetchFlows) return;
 
             var selectedSolution = ComboboxSolutions.SelectedItem as ListObject;
 
@@ -240,6 +244,7 @@ namespace APIReferenceFinder
                     var fetchXml = $@"<fetch>
                               <entity name=""workflow"">
                                 <attribute name=""workflowid"" />
+                                <attribute name=""workflowidunique"" />
                                 <attribute name=""name"" />
                                 <filter type=""and"">
                                   <condition attribute=""category"" operator=""eq"" value=""5"" />
@@ -280,14 +285,19 @@ namespace APIReferenceFinder
                     dataTable.Columns.Add("Name", typeof(string));
                     dataTable.Columns.Add("Link", typeof(string));
 
+
                     foreach (var ent in result)
                     {
+                        var flowId = (Guid)ent["workflowidunique"];
+                        var link = $"https://make.powerapps.com/environments/{ENV_ID}/solutions/{solutionId}/objects/cloudflows/{flowId}/view";
                         var name = (string)ent["name"];
-                        dataTable.Rows.Add(ent.Id, name, "link");
+                        dataTable.Rows.Add(ent.Id, name, link);
                     }
 
                     // Bind the DataTable to the DataGridView.
                     FlowsGrid.DataSource = dataTable;
+
+                    
                 }
             });
         }
@@ -441,6 +451,8 @@ namespace APIReferenceFinder
 
                         refCounter.Text = count + " references";
 
+                        MessageBox.Show(count + " occurances");
+
                         //int index = CodeText.Text.IndexOf(apiLogName);
                         //if (index >= 0)
                         //{
@@ -488,7 +500,7 @@ namespace APIReferenceFinder
             FlowsGrid.Columns["ID"].Visible = false;
 
             FlowsGrid.Columns["Name"].Width = 250;
-            FlowsGrid.Columns["Link"].Width = 50;
+            FlowsGrid.Columns["Link"].Width = 150;
         }
 
         private void InitializeJSView()
@@ -550,6 +562,11 @@ namespace APIReferenceFinder
         }
 
         private void refCounter_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void CodeText_TextChanged(object sender, EventArgs e)
         {
 
         }

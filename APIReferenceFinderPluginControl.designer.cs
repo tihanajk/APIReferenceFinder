@@ -32,9 +32,6 @@ namespace APIReferenceFinder
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(APIReferenceFinderPluginControl));
             this.ComboboxAPIs = new System.Windows.Forms.ComboBox();
-            this.toolStrip2 = new System.Windows.Forms.ToolStrip();
-            this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
-            this.LoadButton = new System.Windows.Forms.ToolStripButton();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.ComboboxSolutions = new System.Windows.Forms.ComboBox();
@@ -49,9 +46,13 @@ namespace APIReferenceFinder
             this.flowsCheck = new System.Windows.Forms.CheckBox();
             this.wrCheck = new System.Windows.Forms.CheckBox();
             this.refCounter = new System.Windows.Forms.Label();
-            this.toolStrip2.SuspendLayout();
+            this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
+            this.LoadButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStrip2 = new System.Windows.Forms.ToolStrip();
+            this.helpProvider1 = new System.Windows.Forms.HelpProvider();
             ((System.ComponentModel.ISupportInitialize)(this.FlowsGrid)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.JSGrid)).BeginInit();
+            this.toolStrip2.SuspendLayout();
             this.SuspendLayout();
             // 
             // ComboboxAPIs
@@ -62,36 +63,6 @@ namespace APIReferenceFinder
             this.ComboboxAPIs.Size = new System.Drawing.Size(291, 32);
             this.ComboboxAPIs.TabIndex = 1;
             this.ComboboxAPIs.SelectedIndexChanged += new System.EventHandler(this.OnAPISelected);
-            // 
-            // toolStrip2
-            // 
-            this.toolStrip2.ImageScalingSize = new System.Drawing.Size(28, 28);
-            this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButton3,
-            this.LoadButton});
-            this.toolStrip2.Location = new System.Drawing.Point(0, 0);
-            this.toolStrip2.Name = "toolStrip2";
-            this.toolStrip2.Size = new System.Drawing.Size(1666, 44);
-            this.toolStrip2.TabIndex = 3;
-            this.toolStrip2.Text = "toolStrip2";
-            // 
-            // toolStripButton3
-            // 
-            this.toolStripButton3.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton3.Image")));
-            this.toolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton3.Name = "toolStripButton3";
-            this.toolStripButton3.Size = new System.Drawing.Size(181, 38);
-            this.toolStripButton3.Text = "Load Solutions";
-            this.toolStripButton3.Click += new System.EventHandler(this.LoadSolutionsBtnClick);
-            // 
-            // LoadButton
-            // 
-            this.LoadButton.Image = ((System.Drawing.Image)(resources.GetObject("LoadButton.Image")));
-            this.LoadButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.LoadButton.Name = "LoadButton";
-            this.LoadButton.Size = new System.Drawing.Size(137, 38);
-            this.LoadButton.Text = "Load APIs";
-            this.LoadButton.Click += new System.EventHandler(this.LoadAPIsBtn_Click);
             // 
             // label1
             // 
@@ -161,6 +132,7 @@ namespace APIReferenceFinder
             this.CodeText.Size = new System.Drawing.Size(536, 578);
             this.CodeText.TabIndex = 13;
             this.CodeText.Text = "";
+            this.CodeText.TextChanged += new System.EventHandler(this.CodeText_TextChanged);
             // 
             // FlowsGrid
             // 
@@ -242,7 +214,37 @@ namespace APIReferenceFinder
             this.refCounter.Text = "0 references";
             this.refCounter.Click += new System.EventHandler(this.refCounter_Click);
             // 
-            // MyPluginControl
+            // toolStripButton3
+            // 
+            this.toolStripButton3.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton3.Image")));
+            this.toolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton3.Name = "toolStripButton3";
+            this.toolStripButton3.Size = new System.Drawing.Size(181, 34);
+            this.toolStripButton3.Text = "Load Solutions";
+            this.toolStripButton3.Click += new System.EventHandler(this.LoadSolutionsBtnClick);
+            // 
+            // LoadButton
+            // 
+            this.LoadButton.Image = ((System.Drawing.Image)(resources.GetObject("LoadButton.Image")));
+            this.LoadButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.LoadButton.Name = "LoadButton";
+            this.LoadButton.Size = new System.Drawing.Size(137, 34);
+            this.LoadButton.Text = "Load APIs";
+            this.LoadButton.Click += new System.EventHandler(this.LoadAPIsBtn_Click);
+            // 
+            // toolStrip2
+            // 
+            this.toolStrip2.ImageScalingSize = new System.Drawing.Size(28, 28);
+            this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripButton3,
+            this.LoadButton});
+            this.toolStrip2.Location = new System.Drawing.Point(0, 0);
+            this.toolStrip2.Name = "toolStrip2";
+            this.toolStrip2.Size = new System.Drawing.Size(1666, 40);
+            this.toolStrip2.TabIndex = 3;
+            this.toolStrip2.Text = "toolStrip2";
+            // 
+            // APIReferenceFinderPluginControl
             // 
             this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.Controls.Add(this.refCounter);
@@ -261,13 +263,14 @@ namespace APIReferenceFinder
             this.Controls.Add(this.label1);
             this.Controls.Add(this.toolStrip2);
             this.Controls.Add(this.ComboboxAPIs);
-            this.Name = "MyPluginControl";
+            this.Name = "APIReferenceFinderPluginControl";
+            this.PluginIcon = ((System.Drawing.Icon)(resources.GetObject("$this.PluginIcon")));
             this.Size = new System.Drawing.Size(1666, 1046);
             this.Load += new System.EventHandler(this.MyPluginControl_Load);
-            this.toolStrip2.ResumeLayout(false);
-            this.toolStrip2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FlowsGrid)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.JSGrid)).EndInit();
+            this.toolStrip2.ResumeLayout(false);
+            this.toolStrip2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -286,8 +289,6 @@ namespace APIReferenceFinder
         private System.Windows.Forms.ToolStripButton toolStripButton2;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.ComboBox ComboboxAPIs;
-        private System.Windows.Forms.ToolStrip toolStrip2;
-        private System.Windows.Forms.ToolStripButton LoadButton;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox ComboboxSolutions;
@@ -296,12 +297,15 @@ namespace APIReferenceFinder
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.RichTextBox CodeText;
         private System.Windows.Forms.DataGridView FlowsGrid;
-        private System.Windows.Forms.ToolStripButton toolStripButton3;
         private System.Windows.Forms.DataGridView JSGrid;
         private System.Windows.Forms.CheckBox managedCheck;
         private System.Windows.Forms.CheckBox unmanagedCheck;
         private System.Windows.Forms.CheckBox flowsCheck;
         private System.Windows.Forms.CheckBox wrCheck;
         private System.Windows.Forms.Label refCounter;
+        private System.Windows.Forms.ToolStripButton toolStripButton3;
+        private System.Windows.Forms.ToolStripButton LoadButton;
+        private System.Windows.Forms.ToolStrip toolStrip2;
+        private System.Windows.Forms.HelpProvider helpProvider1;
     }
 }
