@@ -541,7 +541,7 @@ namespace APIReferenceFinder
             FlowsGrid.Columns["ID"].Visible = false;
             FlowsGrid.Columns["Link"].Visible = false;
 
-            FlowsGrid.Columns["Name"].Width = 250;
+            //FlowsGrid.Columns["Name"].Width = 250;
             if (FlowsGrid.Columns["LinkButton"] == null)
             {
                 // Add a button column to the DataGridView
@@ -584,7 +584,7 @@ namespace APIReferenceFinder
             JSGrid.DataSource = dataTable;
             JSGrid.Columns["ID"].Visible = false;
 
-            JSGrid.Columns["Name"].Width = 250;
+            //JSGrid.Columns["Name"].Width = 250;
 
             if (JSGrid.Columns["InfoButton"] == null)
             {
@@ -681,6 +681,21 @@ namespace APIReferenceFinder
             if (CodeText.Text == "" || CodeText.Text == null) return;
             var step = 1;
             GoToInCode(step);
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox4_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox3_Enter(object sender, EventArgs e)
+        {
+
         }
     }
 }

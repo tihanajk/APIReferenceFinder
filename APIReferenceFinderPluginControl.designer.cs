@@ -30,14 +30,15 @@ namespace APIReferenceFinder
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(APIReferenceFinderPluginControl));
             this.ComboboxAPIs = new System.Windows.Forms.ComboBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
             this.ComboboxSolutions = new System.Windows.Forms.ComboBox();
             this.Solution = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
             this.CodeText = new System.Windows.Forms.RichTextBox();
             this.FlowsGrid = new System.Windows.Forms.DataGridView();
             this.JSGrid = new System.Windows.Forms.DataGridView();
@@ -53,44 +54,30 @@ namespace APIReferenceFinder
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
             this.prevRefBtn = new System.Windows.Forms.Button();
             this.nextRefBtn = new System.Windows.Forms.Button();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.FlowsGrid)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.JSGrid)).BeginInit();
             this.toolStrip2.SuspendLayout();
+            this.groupBox1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // ComboboxAPIs
             // 
             this.ComboboxAPIs.FormattingEnabled = true;
-            this.ComboboxAPIs.Location = new System.Drawing.Point(458, 70);
+            this.ComboboxAPIs.Location = new System.Drawing.Point(445, 43);
             this.ComboboxAPIs.Name = "ComboboxAPIs";
             this.ComboboxAPIs.Size = new System.Drawing.Size(291, 21);
             this.ComboboxAPIs.TabIndex = 1;
             this.ComboboxAPIs.SelectedIndexChanged += new System.EventHandler(this.OnAPISelected);
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label1.Location = new System.Drawing.Point(19, 108);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(37, 13);
-            this.label1.TabIndex = 5;
-            this.label1.Text = "Flows:";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label2.Location = new System.Drawing.Point(444, 108);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(79, 13);
-            this.label2.TabIndex = 7;
-            this.label2.Text = "Webresources:";
-            // 
             // ComboboxSolutions
             // 
             this.ComboboxSolutions.FormattingEnabled = true;
-            this.ComboboxSolutions.Location = new System.Drawing.Point(22, 72);
+            this.ComboboxSolutions.Location = new System.Drawing.Point(9, 45);
             this.ComboboxSolutions.Name = "ComboboxSolutions";
             this.ComboboxSolutions.Size = new System.Drawing.Size(291, 21);
             this.ComboboxSolutions.TabIndex = 8;
@@ -101,38 +88,31 @@ namespace APIReferenceFinder
             this.Solution.AutoSize = true;
             this.Solution.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.Solution.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.Solution.Location = new System.Drawing.Point(19, 52);
+            this.Solution.Location = new System.Drawing.Point(6, 25);
             this.Solution.Name = "Solution";
-            this.Solution.Size = new System.Drawing.Size(57, 13);
+            this.Solution.Size = new System.Drawing.Size(95, 13);
             this.Solution.TabIndex = 9;
-            this.Solution.Text = "Solution:";
+            this.Solution.Text = "Select solution:";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.label3.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label3.Location = new System.Drawing.Point(455, 54);
+            this.label3.Location = new System.Drawing.Point(442, 27);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(31, 13);
+            this.label3.Size = new System.Drawing.Size(71, 13);
             this.label3.TabIndex = 10;
-            this.label3.Text = "API:";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label4.Location = new System.Drawing.Point(875, 108);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(35, 13);
-            this.label4.TabIndex = 12;
-            this.label4.Text = "Code:";
+            this.label3.Text = "Select API:";
             // 
             // CodeText
             // 
-            this.CodeText.Location = new System.Drawing.Point(880, 136);
+            this.CodeText.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.CodeText.Location = new System.Drawing.Point(542, 47);
             this.CodeText.Name = "CodeText";
-            this.CodeText.Size = new System.Drawing.Size(547, 578);
+            this.CodeText.Size = new System.Drawing.Size(556, 858);
             this.CodeText.TabIndex = 13;
             this.CodeText.Text = "";
             // 
@@ -140,30 +120,57 @@ namespace APIReferenceFinder
             // 
             this.FlowsGrid.AllowUserToAddRows = false;
             this.FlowsGrid.AllowUserToDeleteRows = false;
+            this.FlowsGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.FlowsGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.FlowsGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.FlowsGrid.Location = new System.Drawing.Point(24, 136);
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.FlowsGrid.DefaultCellStyle = dataGridViewCellStyle1;
+            this.FlowsGrid.Location = new System.Drawing.Point(6, 19);
             this.FlowsGrid.Name = "FlowsGrid";
             this.FlowsGrid.RowHeadersWidth = 72;
+            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.Black;
+            this.FlowsGrid.RowsDefaultCellStyle = dataGridViewCellStyle2;
             this.FlowsGrid.RowTemplate.Height = 31;
-            this.FlowsGrid.Size = new System.Drawing.Size(406, 578);
+            this.FlowsGrid.Size = new System.Drawing.Size(538, 886);
             this.FlowsGrid.TabIndex = 14;
             // 
             // JSGrid
             // 
             this.JSGrid.AllowUserToAddRows = false;
             this.JSGrid.AllowUserToDeleteRows = false;
+            this.JSGrid.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.JSGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.JSGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.JSGrid.Location = new System.Drawing.Point(449, 136);
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.JSGrid.DefaultCellStyle = dataGridViewCellStyle3;
+            this.JSGrid.Location = new System.Drawing.Point(6, 19);
             this.JSGrid.Name = "JSGrid";
             this.JSGrid.RowHeadersWidth = 72;
+            dataGridViewCellStyle4.ForeColor = System.Drawing.Color.Black;
+            this.JSGrid.RowsDefaultCellStyle = dataGridViewCellStyle4;
             this.JSGrid.RowTemplate.Height = 31;
-            this.JSGrid.Size = new System.Drawing.Size(406, 578);
+            this.JSGrid.Size = new System.Drawing.Size(530, 886);
             this.JSGrid.TabIndex = 15;
             // 
             // managedCheck
             // 
             this.managedCheck.AutoSize = true;
-            this.managedCheck.Location = new System.Drawing.Point(344, 56);
+            this.managedCheck.Location = new System.Drawing.Point(331, 29);
             this.managedCheck.Name = "managedCheck";
             this.managedCheck.Size = new System.Drawing.Size(71, 17);
             this.managedCheck.TabIndex = 16;
@@ -175,7 +182,7 @@ namespace APIReferenceFinder
             this.unmanagedCheck.AutoSize = true;
             this.unmanagedCheck.Checked = true;
             this.unmanagedCheck.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.unmanagedCheck.Location = new System.Drawing.Point(344, 79);
+            this.unmanagedCheck.Location = new System.Drawing.Point(331, 52);
             this.unmanagedCheck.Name = "unmanagedCheck";
             this.unmanagedCheck.Size = new System.Drawing.Size(84, 17);
             this.unmanagedCheck.TabIndex = 17;
@@ -187,7 +194,7 @@ namespace APIReferenceFinder
             this.flowsCheck.AutoSize = true;
             this.flowsCheck.Checked = true;
             this.flowsCheck.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.flowsCheck.Location = new System.Drawing.Point(780, 56);
+            this.flowsCheck.Location = new System.Drawing.Point(767, 29);
             this.flowsCheck.Name = "flowsCheck";
             this.flowsCheck.Size = new System.Drawing.Size(53, 17);
             this.flowsCheck.TabIndex = 18;
@@ -198,7 +205,7 @@ namespace APIReferenceFinder
             // wrCheck
             // 
             this.wrCheck.AutoSize = true;
-            this.wrCheck.Location = new System.Drawing.Point(780, 76);
+            this.wrCheck.Location = new System.Drawing.Point(767, 49);
             this.wrCheck.Name = "wrCheck";
             this.wrCheck.Size = new System.Drawing.Size(95, 17);
             this.wrCheck.TabIndex = 19;
@@ -208,8 +215,9 @@ namespace APIReferenceFinder
             // 
             // refCounter
             // 
+            this.refCounter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.refCounter.AutoSize = true;
-            this.refCounter.Location = new System.Drawing.Point(1237, 108);
+            this.refCounter.Location = new System.Drawing.Point(942, 22);
             this.refCounter.Name = "refCounter";
             this.refCounter.Size = new System.Drawing.Size(66, 13);
             this.refCounter.TabIndex = 20;
@@ -258,7 +266,9 @@ namespace APIReferenceFinder
             // 
             // prevRefBtn
             // 
-            this.prevRefBtn.Location = new System.Drawing.Point(1309, 101);
+            this.prevRefBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.prevRefBtn.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.prevRefBtn.Location = new System.Drawing.Point(1014, 16);
             this.prevRefBtn.Name = "prevRefBtn";
             this.prevRefBtn.Size = new System.Drawing.Size(39, 25);
             this.prevRefBtn.TabIndex = 22;
@@ -268,7 +278,9 @@ namespace APIReferenceFinder
             // 
             // nextRefBtn
             // 
-            this.nextRefBtn.Location = new System.Drawing.Point(1354, 101);
+            this.nextRefBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.nextRefBtn.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.nextRefBtn.Location = new System.Drawing.Point(1059, 16);
             this.nextRefBtn.Name = "nextRefBtn";
             this.nextRefBtn.Size = new System.Drawing.Size(39, 25);
             this.nextRefBtn.TabIndex = 23;
@@ -276,27 +288,66 @@ namespace APIReferenceFinder
             this.nextRefBtn.UseVisualStyleBackColor = true;
             this.nextRefBtn.Click += new System.EventHandler(this.NextRefBtn_Click);
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.AutoSize = true;
+            this.groupBox1.Controls.Add(this.label3);
+            this.groupBox1.Controls.Add(this.ComboboxAPIs);
+            this.groupBox1.Controls.Add(this.ComboboxSolutions);
+            this.groupBox1.Controls.Add(this.Solution);
+            this.groupBox1.Controls.Add(this.wrCheck);
+            this.groupBox1.Controls.Add(this.managedCheck);
+            this.groupBox1.Controls.Add(this.flowsCheck);
+            this.groupBox1.Controls.Add(this.unmanagedCheck);
+            this.groupBox1.ForeColor = System.Drawing.SystemColors.Window;
+            this.groupBox1.Location = new System.Drawing.Point(3, 38);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(1660, 88);
+            this.groupBox1.TabIndex = 24;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "API info";
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.groupBox2.Controls.Add(this.FlowsGrid);
+            this.groupBox2.ForeColor = System.Drawing.SystemColors.Window;
+            this.groupBox2.Location = new System.Drawing.Point(3, 132);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(550, 911);
+            this.groupBox2.TabIndex = 25;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Flows:";
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox3.Controls.Add(this.prevRefBtn);
+            this.groupBox3.Controls.Add(this.JSGrid);
+            this.groupBox3.Controls.Add(this.refCounter);
+            this.groupBox3.Controls.Add(this.CodeText);
+            this.groupBox3.Controls.Add(this.nextRefBtn);
+            this.groupBox3.ForeColor = System.Drawing.SystemColors.Window;
+            this.groupBox3.Location = new System.Drawing.Point(559, 132);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(1104, 911);
+            this.groupBox3.TabIndex = 26;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Web resources:";
+            this.groupBox3.Enter += new System.EventHandler(this.groupBox3_Enter);
+            // 
             // APIReferenceFinderPluginControl
             // 
-            this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.Controls.Add(this.nextRefBtn);
-            this.Controls.Add(this.prevRefBtn);
-            this.Controls.Add(this.refCounter);
-            this.Controls.Add(this.wrCheck);
-            this.Controls.Add(this.flowsCheck);
-            this.Controls.Add(this.unmanagedCheck);
-            this.Controls.Add(this.managedCheck);
-            this.Controls.Add(this.JSGrid);
-            this.Controls.Add(this.FlowsGrid);
-            this.Controls.Add(this.CodeText);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.Solution);
-            this.Controls.Add(this.ComboboxSolutions);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
+            this.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.Controls.Add(this.groupBox3);
+            this.Controls.Add(this.groupBox2);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.toolStrip2);
-            this.Controls.Add(this.ComboboxAPIs);
             this.Name = "APIReferenceFinderPluginControl";
             this.PluginIcon = ((System.Drawing.Icon)(resources.GetObject("$this.PluginIcon")));
             this.Size = new System.Drawing.Size(1666, 1046);
@@ -305,6 +356,11 @@ namespace APIReferenceFinder
             ((System.ComponentModel.ISupportInitialize)(this.JSGrid)).EndInit();
             this.toolStrip2.ResumeLayout(false);
             this.toolStrip2.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -323,12 +379,9 @@ namespace APIReferenceFinder
         private System.Windows.Forms.ToolStripButton toolStripButton2;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.ComboBox ComboboxAPIs;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox ComboboxSolutions;
         private System.Windows.Forms.Label Solution;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label4;
         private System.Windows.Forms.RichTextBox CodeText;
         private System.Windows.Forms.DataGridView FlowsGrid;
         private System.Windows.Forms.DataGridView JSGrid;
@@ -344,5 +397,8 @@ namespace APIReferenceFinder
         private System.Windows.Forms.ToolStripButton toolStripButton4;
         private System.Windows.Forms.Button prevRefBtn;
         private System.Windows.Forms.Button nextRefBtn;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.GroupBox groupBox3;
     }
 }
