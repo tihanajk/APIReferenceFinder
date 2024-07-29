@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("MyTool")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("API Reference Finder")]
+[assembly: AssemblyDescription("Custom API reference finder in power automate flows and webresources")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("TJK")]
-[assembly: AssemblyProduct("MyTool")]
+[assembly: AssemblyProduct("APIReferenceFinder")]
 [assembly: AssemblyCopyright("Copyright © 2024")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
