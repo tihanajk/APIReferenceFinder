@@ -1,15 +1,12 @@
 ﻿using McTools.Xrm.Connection;
-using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlTypes;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
-using System.Reflection;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility;
 
@@ -25,9 +22,7 @@ namespace APIReferenceFinder
         {
             InitializeComponent();
             InitializeFlowView();
-            InitializeJSView();
-
-            GetSolutions();
+            InitializeJSView();            
         }
 
         private void MyPluginControl_Load(object sender, EventArgs e)
@@ -105,6 +100,8 @@ namespace APIReferenceFinder
             base.UpdateConnection(newService, detail, actionName, parameter);
 
             ENV_ID = detail.EnvironmentId;
+
+            ExecuteMethod(GetSolutions);
 
             if (mySettings != null && detail != null)
             {
@@ -468,6 +465,9 @@ namespace APIReferenceFinder
 
                         CodeText.Text = decodedString;
 
+                        var name = (string)result["name"];
+                        wrName.Text = name;
+
                         var index = 0;
                         var count = 0;
                         var first = true;
@@ -539,37 +539,60 @@ namespace APIReferenceFinder
 
             FlowsGrid.DataSource = dataTable;
             FlowsGrid.Columns["ID"].Visible = false;
-            FlowsGrid.Columns["Link"].Visible = false;
 
-            //FlowsGrid.Columns["Name"].Width = 250;
+            FlowsGrid.Columns["Name"].Width = 180;
+            FlowsGrid.Columns["Link"].Width = 180;
             if (FlowsGrid.Columns["LinkButton"] == null)
             {
                 // Add a button column to the DataGridView
                 DataGridViewButtonColumn buttonColumn = new DataGridViewButtonColumn();
-                buttonColumn.HeaderText = "Link";
+                buttonColumn.HeaderText = "";
                 buttonColumn.Name = "LinkButton";
-                buttonColumn.Text = "Copy Link";
+                buttonColumn.Text = "Copy";
                 buttonColumn.UseColumnTextForButtonValue = true;
-                buttonColumn.Width = 80;
+                buttonColumn.Width = 47;
                 FlowsGrid.Columns.Add(buttonColumn);
             }
 
             // Handle the CellContentClick event
-            FlowsGrid.CellContentClick -= CopyFlowLink;
+            FlowsGrid.CellContentClick -= HandleFlowItemClick;
 
             // Handle the CellContentClick event.
-            FlowsGrid.CellContentClick += CopyFlowLink;
+            FlowsGrid.CellContentClick += HandleFlowItemClick;
         }
 
-        private void CopyFlowLink(object sender, DataGridViewCellEventArgs e)
+        private void HandleFlowItemClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.ColumnIndex == FlowsGrid.Columns["LinkButton"].Index && e.RowIndex >= 0)
+            if (e.ColumnIndex == FlowsGrid.Columns["LinkButton"]?.Index && e.RowIndex >= 0)
             {
                 int rowIndex = e.RowIndex;
                 var link = (string)FlowsGrid.Rows[rowIndex].Cells["Link"].Value;
 
                 Clipboard.SetText(link);
                 MessageBox.Show("Flow link copied to clipboard.");
+            }
+            else if (e.ColumnIndex == FlowsGrid.Columns["Link"].Index && e.RowIndex >= 0)
+            {
+                int rowIndex = e.RowIndex;
+                var link = (string)FlowsGrid.Rows[rowIndex].Cells["Link"].Value;
+
+                OpenLink(link);
+            }
+        }
+
+        private void OpenLink(string url)
+        {
+            try
+            {
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = url,
+                    UseShellExecute = true
+                });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error occurred while trying to open the link: " + ex.Message);
             }
         }
 
@@ -584,7 +607,7 @@ namespace APIReferenceFinder
             JSGrid.DataSource = dataTable;
             JSGrid.Columns["ID"].Visible = false;
 
-            //JSGrid.Columns["Name"].Width = 250;
+            JSGrid.Columns["Name"].Width = 340;
 
             if (JSGrid.Columns["InfoButton"] == null)
             {
@@ -594,7 +617,7 @@ namespace APIReferenceFinder
                 buttonColumn.Name = "InfoButton";
                 buttonColumn.Text = "View Code";
                 buttonColumn.UseColumnTextForButtonValue = true;
-                buttonColumn.Width = 80;
+                buttonColumn.Width = 67;
                 JSGrid.Columns.Add(buttonColumn);
             }
 
@@ -630,7 +653,7 @@ namespace APIReferenceFinder
         }
 
 
-        private void GoTOSolutionButton(object sender, EventArgs e)
+        private void OpenSolutionButton(object sender, EventArgs e)
         {
             var selectedSolution = ComboboxSolutions.SelectedItem as ListObject;
             if (selectedSolution == null) return;
@@ -639,18 +662,7 @@ namespace APIReferenceFinder
             string url = $"https://make.powerapps.com/environments/{ENV_ID}/solutions/{solutionId}";
 
             if (solutionId == "1") return;
-            try
-            {
-                Process.Start(new ProcessStartInfo
-                {
-                    FileName = url,
-                    UseShellExecute = true
-                });
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("An error occurred while trying to open the link: " + ex.Message);
-            }
+            OpenLink(url);
         }
 
         private void GoToInCode(int step)
@@ -683,19 +695,5 @@ namespace APIReferenceFinder
             GoToInCode(step);
         }
 
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void groupBox4_Enter(object sender, EventArgs e)
-        {
-
-        }
-
-        private void groupBox3_Enter(object sender, EventArgs e)
-        {
-
-        }
     }
 }
