@@ -22,7 +22,7 @@ namespace APIReferenceFinder
         {
             InitializeComponent();
             InitializeFlowView();
-            InitializeJSView();            
+            InitializeJSView();
         }
 
         private void MyPluginControl_Load(object sender, EventArgs e)
@@ -40,45 +40,6 @@ namespace APIReferenceFinder
             {
                 LogInfo("Settings found and loaded");
             }
-        }
-
-        private void tsbClose_Click(object sender, EventArgs e)
-        {
-            CloseTool();
-        }
-
-        private void tsbSample_Click(object sender, EventArgs e)
-        {
-            // The ExecuteMethod method handles connecting to an
-            // organization if XrmToolBox is not yet connected
-            ExecuteMethod(GetAccounts);
-        }
-
-        private void GetAccounts()
-        {
-            WorkAsync(new WorkAsyncInfo
-            {
-                Message = "Getting accounts",
-                Work = (worker, args) =>
-                {
-                    args.Result = Service.RetrieveMultiple(new QueryExpression("th_dev")
-                    {
-                        TopCount = 50
-                    });
-                },
-                PostWorkCallBack = (args) =>
-                {
-                    if (args.Error != null)
-                    {
-                        MessageBox.Show(args.Error.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                    var result = args.Result as EntityCollection;
-                    if (result != null)
-                    {
-                        MessageBox.Show($"Found {result.Entities.Count} devs");
-                    }
-                }
-            });
         }
 
         /// <summary>
@@ -112,8 +73,8 @@ namespace APIReferenceFinder
 
         private class ListObject
         {
-            public string name { get; set; }
-            public string value { get; set; }
+            public string Name { get; set; }
+            public string Value { get; set; }
         }
 
         private void GetSolutions()
@@ -155,8 +116,8 @@ namespace APIReferenceFinder
 
                         items.Add(new ListObject()
                         {
-                            name = "<All Solutions>",
-                            value = "1"
+                            Name = "<All Solutions>",
+                            Value = "1"
                         });
 
                         foreach (var sol in result.Entities)
@@ -167,14 +128,14 @@ namespace APIReferenceFinder
 
                             items.Add(new ListObject()
                             {
-                                name = name,
-                                value = solutionId,
+                                Name = name,
+                                Value = solutionId,
                             });
                         }
 
                         ComboboxSolutions.DataSource = items;
-                        ComboboxSolutions.DisplayMember = "name";
-                        ComboboxSolutions.ValueMember = "value";
+                        ComboboxSolutions.DisplayMember = "Name";
+                        ComboboxSolutions.ValueMember = "Value";
                     }
                 }
             });
@@ -188,7 +149,7 @@ namespace APIReferenceFinder
 
             if (selectedSolution == null) return;
 
-            var solutionId = selectedSolution.value;
+            var solutionId = selectedSolution.Value;
 
             WorkAsync(new WorkAsyncInfo()
             {
@@ -231,15 +192,15 @@ namespace APIReferenceFinder
                         foreach (var ent in result.Entities)
                         {
                             var listObject = new ListObject();
-                            listObject.name = $"{(string)ent["displayname"]} ({(string)ent["uniquename"]})";
-                            listObject.value = (string)ent["uniquename"];
+                            listObject.Name = $"{(string)ent["displayname"]} ({(string)ent["uniquename"]})";
+                            listObject.Value = (string)ent["uniquename"];
 
                             items.Add(listObject);
                         }
 
                         ComboboxAPIs.DataSource = items;
-                        ComboboxAPIs.DisplayMember = "name";
-                        ComboboxAPIs.ValueMember = "value";
+                        ComboboxAPIs.DisplayMember = "Name";
+                        ComboboxAPIs.ValueMember = "Value";
                     }
                 }
             });
@@ -254,12 +215,12 @@ namespace APIReferenceFinder
 
             if (selectedSolution == null) return;
 
-            var solutionId = selectedSolution.value;
+            var solutionId = selectedSolution.Value;
 
             var api = ComboboxAPIs.SelectedItem as ListObject;
             if (api == null) { InitializeFlowView(); return; }
 
-            var apiLogName = api.value;
+            var apiLogName = api.Value;
             if (apiLogName == null) return;
 
             WorkAsync(new WorkAsyncInfo()
@@ -282,7 +243,7 @@ namespace APIReferenceFinder
                                 <attribute name='name' />
                                 <filter type='and'>
                                   <condition attribute='category' operator='eq' value='5' />
-                                  <condition attribute='clientdata' operator='like' value='%&quot;actionName&quot;:&quot;{apiLogName}&quot;,%' />
+                                  <condition attribute='clientdata' operator='like' value='%&quot;actionName&quot;:&quot;{apiLogName}&quot;%' />
                                 </filter>
                                 {solutionFilter}
                                 <order attribute='name' />
@@ -306,8 +267,6 @@ namespace APIReferenceFinder
                     }
 
                     DataTable dataTable = new DataTable();
-
-                    // Define the columns.
                     dataTable.Columns.Add("ID", typeof(Guid));
                     dataTable.Columns.Add("Name", typeof(string));
                     dataTable.Columns.Add("Link", typeof(string));
@@ -319,11 +278,7 @@ namespace APIReferenceFinder
                         var name = (string)ent["name"];
                         dataTable.Rows.Add(ent.Id, name, link);
                     }
-
-                    // Bind the DataTable to the DataGridView.
                     FlowsGrid.DataSource = dataTable;
-
-
                 }
             });
         }
@@ -336,17 +291,17 @@ namespace APIReferenceFinder
             var selectedSolution = ComboboxSolutions.SelectedItem as ListObject;
             if (selectedSolution == null) return;
 
-            var solutionId = selectedSolution.value;
+            var solutionId = selectedSolution.Value;
 
             var api = ComboboxAPIs.SelectedItem as ListObject;
             if (api == null) return;
 
-            var apiLogName = api.value;
+            var apiLogName = api.Value;
             if (apiLogName == null) return;
 
             if (solutionId == "1")
             {
-                MessageBox.Show("not recommended to fetch webresources from all solutions");
+                MessageBox.Show("Not recommended to fetch webresources from all solutions - please select a solution");
                 return;
             }
 
@@ -386,11 +341,8 @@ namespace APIReferenceFinder
                     }
 
                     DataTable dataTable = new DataTable();
-
-                    // Define the columns.
                     dataTable.Columns.Add("ID", typeof(Guid));
                     dataTable.Columns.Add("Name", typeof(string));
-                    //dataTable.Columns.Add("Link", typeof(string));
 
                     foreach (var resource in result)
                     {
@@ -431,7 +383,7 @@ namespace APIReferenceFinder
             var api = ComboboxAPIs.SelectedItem as ListObject;
             if (api == null) return;
 
-            var apiLogName = api.value;
+            var apiLogName = api.Value;
             if (apiLogName == null) return;
 
             WorkAsync(new WorkAsyncInfo()
@@ -490,21 +442,6 @@ namespace APIReferenceFinder
                         }
 
                         refCounter.Text = count + " references";
-
-                        //MessageBox.Show(count + " occurances");
-
-                        //int index = CodeText.Text.IndexOf(apiLogName);
-                        //if (index >= 0)
-                        //{
-                        //    // Set the cursor position to the start of the word
-                        //    CodeText.SelectionStart = index;
-                        //    // Set the cursor length to the length of the word (select the word)
-                        //    CodeText.SelectionLength = apiLogName.Length;
-                        //    // Scroll to the cursor
-                        //    CodeText.ScrollToCaret();
-
-                        //    CodeText.SelectionColor = Color.Red;
-                        //}
                     }
                 }
 
@@ -525,14 +462,11 @@ namespace APIReferenceFinder
         private void OnSolutionSelected(object sender, EventArgs e)
         {
             ExecuteMethod(GetAPIs);
-            //ExecuteMethod(GetSolutionFlows);
-            //ExecuteMethod(GetSolutionJS);
         }
 
         private void InitializeFlowView()
         {
             DataTable dataTable = new DataTable();
-            // Define the columns.
             dataTable.Columns.Add("ID", typeof(Guid));
             dataTable.Columns.Add("Name", typeof(string));
             dataTable.Columns.Add("Link", typeof(string));
@@ -544,7 +478,6 @@ namespace APIReferenceFinder
             FlowsGrid.Columns["Link"].Width = 180;
             if (FlowsGrid.Columns["LinkButton"] == null)
             {
-                // Add a button column to the DataGridView
                 DataGridViewButtonColumn buttonColumn = new DataGridViewButtonColumn();
                 buttonColumn.HeaderText = "";
                 buttonColumn.Name = "LinkButton";
@@ -554,12 +487,37 @@ namespace APIReferenceFinder
                 FlowsGrid.Columns.Add(buttonColumn);
             }
 
-            // Handle the CellContentClick event
             FlowsGrid.CellContentClick -= HandleFlowItemClick;
-
-            // Handle the CellContentClick event.
             FlowsGrid.CellContentClick += HandleFlowItemClick;
         }
+        private void InitializeJSView()
+        {
+            DataTable dataTable = new DataTable();
+            dataTable.Columns.Add("ID", typeof(Guid));
+            dataTable.Columns.Add("Name", typeof(string));
+
+            JSGrid.DataSource = dataTable;
+            JSGrid.Columns["ID"].Visible = false;
+
+            JSGrid.Columns["Name"].Width = 340;
+
+            if (JSGrid.Columns["InfoButton"] == null)
+            {
+                DataGridViewButtonColumn buttonColumn = new DataGridViewButtonColumn();
+                buttonColumn.HeaderText = "Info";
+                buttonColumn.Name = "InfoButton";
+                buttonColumn.Text = "View Code";
+                buttonColumn.UseColumnTextForButtonValue = true;
+                buttonColumn.Width = 67;
+                JSGrid.Columns.Add(buttonColumn);
+            }
+
+            JSGrid.CellContentClick -= ViewCodeClick;
+            JSGrid.CellContentClick += ViewCodeClick;
+
+            refCounter.Text = "0 references";
+        }
+
 
         private void HandleFlowItemClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -596,39 +554,6 @@ namespace APIReferenceFinder
             }
         }
 
-        private void InitializeJSView()
-        {
-            DataTable dataTable = new DataTable();
-
-            // Define the columns.
-            dataTable.Columns.Add("ID", typeof(Guid));
-            dataTable.Columns.Add("Name", typeof(string));
-
-            JSGrid.DataSource = dataTable;
-            JSGrid.Columns["ID"].Visible = false;
-
-            JSGrid.Columns["Name"].Width = 340;
-
-            if (JSGrid.Columns["InfoButton"] == null)
-            {
-                // Add a button column to the DataGridView
-                DataGridViewButtonColumn buttonColumn = new DataGridViewButtonColumn();
-                buttonColumn.HeaderText = "Info";
-                buttonColumn.Name = "InfoButton";
-                buttonColumn.Text = "View Code";
-                buttonColumn.UseColumnTextForButtonValue = true;
-                buttonColumn.Width = 67;
-                JSGrid.Columns.Add(buttonColumn);
-            }
-
-            // Handle the CellContentClick event
-            JSGrid.CellContentClick -= ViewCodeClick;
-
-            // Handle the CellContentClick event.
-            JSGrid.CellContentClick += ViewCodeClick;
-
-            refCounter.Text = "0 references";
-        }
 
 
         private void LoadSolutionsBtnClick(object sender, EventArgs e)
@@ -658,7 +583,7 @@ namespace APIReferenceFinder
             var selectedSolution = ComboboxSolutions.SelectedItem as ListObject;
             if (selectedSolution == null) return;
 
-            var solutionId = selectedSolution.value;
+            var solutionId = selectedSolution.Value;
             string url = $"https://make.powerapps.com/environments/{ENV_ID}/solutions/{solutionId}";
 
             if (solutionId == "1") return;
