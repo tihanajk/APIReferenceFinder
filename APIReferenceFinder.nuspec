@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>APIReferenceFinder</id>
+    <version>1.2024.30.7</version>
+    <title>API Reference Finder</title>
+    <authors>Tihana Jurković-Kormo</authors>
+    <owners></owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <projectUrl>https://github.com/tihanajk/APIReferenceFinder</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/tihanajk/APIReferenceFinder/main/img/logo/logo_blue.jpg</iconUrl>
+    <description>XrmToolBox tool for finding apis in power automate flows and web resources</description>
+    <summary>XrmToolBox tool for finding apis in power automate flows and web resources</summary>
+    <copyright>Copyright 2024 TJK</copyright>
+    <tags>XrmToolBox Plugins APIReferenceFinder</tags>
+    <dependencies>
+      <dependency id="XrmToolBoxPackage" version="1.2018.6.25" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="lib\net472\APIReferenceFinder.dll" target="lib\net472\APIReferenceFinder.dll" />
+  </files>
+</package>
