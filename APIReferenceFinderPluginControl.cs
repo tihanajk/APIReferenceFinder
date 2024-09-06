@@ -161,7 +161,7 @@ namespace APIReferenceFinder
                     query.ColumnSet.AddColumns("customapiid", "displayname", "uniquename");
                     query.AddOrder("displayname", OrderType.Ascending);
 
-                    if (solutionId != "1")
+                    if (solutionId != "1" && !allApisCheck.Checked)
                     {
                         var aa = query.AddLink("solutioncomponent", "customapiid", "objectid");
                         aa.EntityAlias = "aa";
@@ -299,11 +299,11 @@ namespace APIReferenceFinder
             var apiLogName = api.Value;
             if (apiLogName == null) return;
 
-            if (solutionId == "1")
-            {
-                MessageBox.Show("Not recommended to fetch webresources from all solutions - please select a solution");
-                return;
-            }
+            //if (solutionId == "1")
+            //{
+            //    MessageBox.Show("Not recommended to fetch webresources from all solutions - please select a solution");
+            //    return;
+            //}
 
             WorkAsync(new WorkAsyncInfo()
             {
@@ -461,6 +461,14 @@ namespace APIReferenceFinder
 
         private void OnSolutionSelected(object sender, EventArgs e)
         {
+            var selectedSolution = ComboboxSolutions.SelectedItem as ListObject;
+            if (selectedSolution?.Value == "1")
+            {
+                wrFetchInfo.Text = "not recommended to fetch webresources from all solutions - long running action";
+                wrCheck.Checked = false;
+            }
+            else wrFetchInfo.Text = "";
+
             ExecuteMethod(GetAPIs);
         }
 
@@ -573,6 +581,8 @@ namespace APIReferenceFinder
         {
             var check = wrCheck.Checked;
 
+            var selectedSolution = ComboboxSolutions.SelectedItem as ListObject;
+
             if (check) ExecuteMethod(GetSolutionJS);
             else InitializeJSView();
         }
@@ -620,5 +630,9 @@ namespace APIReferenceFinder
             GoToInCode(step);
         }
 
+        private void AllApisCheck_CheckedChanged(object sender, EventArgs e)
+        {
+            ExecuteMethod(GetAPIs);
+        }
     }
 }

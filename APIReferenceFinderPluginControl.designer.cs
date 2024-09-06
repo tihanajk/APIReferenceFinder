@@ -30,10 +30,10 @@ namespace APIReferenceFinder
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(APIReferenceFinderPluginControl));
             this.ComboboxAPIs = new System.Windows.Forms.ComboBox();
             this.ComboboxSolutions = new System.Windows.Forms.ComboBox();
@@ -55,6 +55,8 @@ namespace APIReferenceFinder
             this.prevRefBtn = new System.Windows.Forms.Button();
             this.nextRefBtn = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.allApisCheck = new System.Windows.Forms.CheckBox();
+            this.wrFetchInfo = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.wrName = new System.Windows.Forms.Label();
@@ -126,19 +128,19 @@ namespace APIReferenceFinder
             | System.Windows.Forms.AnchorStyles.Right)));
             this.FlowsGrid.BackgroundColor = System.Drawing.SystemColors.InactiveCaption;
             this.FlowsGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.InfoText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.FlowsGrid.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.InfoText;
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.FlowsGrid.DefaultCellStyle = dataGridViewCellStyle5;
             this.FlowsGrid.Location = new System.Drawing.Point(6, 19);
             this.FlowsGrid.Name = "FlowsGrid";
             this.FlowsGrid.RowHeadersWidth = 72;
-            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.Black;
-            this.FlowsGrid.RowsDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle6.ForeColor = System.Drawing.Color.Black;
+            this.FlowsGrid.RowsDefaultCellStyle = dataGridViewCellStyle6;
             this.FlowsGrid.RowTemplate.Height = 31;
             this.FlowsGrid.Size = new System.Drawing.Size(482, 870);
             this.FlowsGrid.TabIndex = 14;
@@ -151,19 +153,19 @@ namespace APIReferenceFinder
             | System.Windows.Forms.AnchorStyles.Left)));
             this.JSGrid.BackgroundColor = System.Drawing.SystemColors.InactiveCaption;
             this.JSGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.InfoText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.JSGrid.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            dataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.InfoText;
+            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.JSGrid.DefaultCellStyle = dataGridViewCellStyle7;
             this.JSGrid.Location = new System.Drawing.Point(6, 19);
             this.JSGrid.Name = "JSGrid";
             this.JSGrid.RowHeadersWidth = 72;
-            dataGridViewCellStyle4.ForeColor = System.Drawing.Color.Black;
-            this.JSGrid.RowsDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle8.ForeColor = System.Drawing.Color.Black;
+            this.JSGrid.RowsDefaultCellStyle = dataGridViewCellStyle8;
             this.JSGrid.RowTemplate.Height = 31;
             this.JSGrid.Size = new System.Drawing.Size(482, 870);
             this.JSGrid.TabIndex = 15;
@@ -183,7 +185,7 @@ namespace APIReferenceFinder
             this.unmanagedCheck.AutoSize = true;
             this.unmanagedCheck.Checked = true;
             this.unmanagedCheck.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.unmanagedCheck.Location = new System.Drawing.Point(331, 52);
+            this.unmanagedCheck.Location = new System.Drawing.Point(331, 49);
             this.unmanagedCheck.Name = "unmanagedCheck";
             this.unmanagedCheck.Size = new System.Drawing.Size(84, 17);
             this.unmanagedCheck.TabIndex = 17;
@@ -294,6 +296,8 @@ namespace APIReferenceFinder
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.AutoSize = true;
+            this.groupBox1.Controls.Add(this.allApisCheck);
+            this.groupBox1.Controls.Add(this.wrFetchInfo);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.ComboboxAPIs);
             this.groupBox1.Controls.Add(this.ComboboxSolutions);
@@ -309,6 +313,27 @@ namespace APIReferenceFinder
             this.groupBox1.TabIndex = 24;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "API info";
+            // 
+            // allApisCheck
+            // 
+            this.allApisCheck.AutoSize = true;
+            this.allApisCheck.Location = new System.Drawing.Point(445, 70);
+            this.allApisCheck.Name = "allApisCheck";
+            this.allApisCheck.Size = new System.Drawing.Size(80, 17);
+            this.allApisCheck.TabIndex = 21;
+            this.allApisCheck.Text = "List all APIs";
+            this.allApisCheck.UseVisualStyleBackColor = true;
+            this.allApisCheck.CheckedChanged += new System.EventHandler(this.AllApisCheck_CheckedChanged);
+            // 
+            // wrFetchInfo
+            // 
+            this.wrFetchInfo.AutoSize = true;
+            this.wrFetchInfo.ForeColor = System.Drawing.Color.Red;
+            this.wrFetchInfo.Location = new System.Drawing.Point(764, 69);
+            this.wrFetchInfo.Name = "wrFetchInfo";
+            this.wrFetchInfo.Size = new System.Drawing.Size(381, 13);
+            this.wrFetchInfo.TabIndex = 20;
+            this.wrFetchInfo.Text = "Not recommended to fetch webresources from all solutions - long running action";
             // 
             // groupBox2
             // 
@@ -411,5 +436,7 @@ namespace APIReferenceFinder
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.Label wrName;
+        private System.Windows.Forms.Label wrFetchInfo;
+        private System.Windows.Forms.CheckBox allApisCheck;
     }
 }
