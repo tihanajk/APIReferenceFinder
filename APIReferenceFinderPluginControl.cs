@@ -84,7 +84,7 @@ namespace APIReferenceFinder
 
             var all = (managed && unmanaged) || (!managed && !unmanaged);
 
-            var message = $"Getting All {(managed ? "Managed" : "")} Solutions";
+            var message = $"Fetching All {(managed ? "Managed" : "")} Solutions";
             WorkAsync(new WorkAsyncInfo()
             {
                 Message = message,
@@ -153,7 +153,7 @@ namespace APIReferenceFinder
 
             WorkAsync(new WorkAsyncInfo()
             {
-                Message = "Getting APIs",
+                Message = "Fetching APIs",
                 AsyncArgument = null,
                 Work = (worker, args) =>
                 {
@@ -307,7 +307,7 @@ namespace APIReferenceFinder
 
             WorkAsync(new WorkAsyncInfo()
             {
-                Message = "Fetching webresources",
+                Message = "Fetching Webresources",
                 AsyncArgument = null,
                 Work = (worker, args) =>
                 {
@@ -562,8 +562,6 @@ namespace APIReferenceFinder
             }
         }
 
-
-
         private void LoadSolutionsBtnClick(object sender, EventArgs e)
         {
             ExecuteMethod(GetSolutions);
@@ -586,8 +584,6 @@ namespace APIReferenceFinder
             if (check) ExecuteMethod(GetSolutionJS);
             else InitializeJSView();
         }
-
-
         private void OpenSolutionButton(object sender, EventArgs e)
         {
             var selectedSolution = ComboboxSolutions.SelectedItem as ListObject;
