@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>APIReferenceFinder</id>
-    <version>1.2024.30.7</version>
+    <version>1.2024.9.2</version>
     <title>API Reference Finder</title>
     <authors>Tihana Jurković-Kormo</authors>
     <owners></owners>
