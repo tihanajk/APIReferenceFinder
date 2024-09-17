@@ -314,6 +314,8 @@ namespace APIReferenceFinder
                     var aa_solutionid = solutionId;
                     var query = new QueryExpression("webresource");
                     query.ColumnSet.AllColumns = true;
+                    query.Criteria.AddCondition("content", ConditionOperator.NotNull);
+
                     query.AddOrder("name", OrderType.Ascending);
 
                     if (solutionId != "1")
