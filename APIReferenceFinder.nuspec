@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>APIReferenceFinder</id>
-    <version>1.2024.9.4</version>
+    <version>1.2025.6.1</version>
     <title>API Reference Finder</title>
     <authors>Tihana Jurković-Kormo</authors>
     <owners></owners>
@@ -11,7 +11,9 @@
     <iconUrl>https://raw.githubusercontent.com/tihanajk/APIReferenceFinder/main/img/logo/logo_blue.jpg</iconUrl>
     <description>XrmToolBox tool for finding apis in power automate flows and web resources</description>
     <summary>XrmToolBox tool for finding apis in power automate flows and web resources</summary>
-    <releaseNotes>1.2024.9.4
+    <releaseNotes>1.2025.6.1
+- Fixed link to power automate flow when no solution selected
+1.2024.9.4
 - Fixed issue when fetching webresource with no content</releaseNotes>
     <copyright>Copyright 2024 TJK</copyright>
     <tags>XrmToolBox Plugins APIReferenceFinder</tags>
