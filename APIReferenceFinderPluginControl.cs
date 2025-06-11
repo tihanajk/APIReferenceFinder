@@ -274,7 +274,7 @@ namespace APIReferenceFinder
                     foreach (var ent in result)
                     {
                         var flowId = (Guid)ent["workflowidunique"];
-                        var link = $"https://make.powerapps.com/environments/{ENV_ID}/solutions/{solutionId}/objects/cloudflows/{flowId}/view";
+                        var link = $"https://make.powerautomate.com/environments/{ENV_ID}/{(solutionId == "1" ? "" : $"solutions/{solutionId}/")}flows/{flowId}/details";
                         var name = (string)ent["name"];
                         dataTable.Rows.Add(ent.Id, name, link);
                     }
